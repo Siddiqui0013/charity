@@ -1,36 +1,54 @@
 import KidImage from "../assets/heroKid.png";
+import User2m from "../assets/User.png"
 
 export default function HeroSection() {
     return (
       <section id="hero" >
-        <div className="mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          
-          <div className="space-y-6 w-[45%]">
-            <h4 className="text-sm uppercase tracking-widest font-medium">Provide Hope For Homeless People</h4>
-            <h1 className="text-4xl sm:text-5xl font-extrabold leading-snug">
+        <div className="flex md:flex-row flex-col gap-8 items-center justify-center">          
+          <div className="w-[50%] flex items-start justify-center"
+          style={{
+              marginTop: "20px"
+            }}
+          >
+            <div className="flex flex-col gap-8 w-[90%] mx-auto">
+            <h4 className="text-sm uppercase self-start font-medium">Provide Hope For Homeless People</h4>
+            <h1 className="text-4xl sm:text-5xl text-start font-extrabold ">
               Support <span className="text-yellow-400">Kids</span> &amp; Elderly <br /> With Donations!
             </h1>
-            <p className="text-lg text-gray-300">
+            <p className="text-lg text-gray-300 text-start">
               Providing assistance through donations to children and elderly individuals for their well-being and development.
             </p>
-            <button className="bg-green-500 text-white px-6 py-3 rounded-md text-lg font-semibold hover:bg-green-600">
+            <div className="flex gap-12 items-start justify-start">
+            <button className="yellowBtn h-[50px]">
               Donate Now
             </button>
+            <div className="cricles flex ">
+              <img src={User2m} alt="User" />
+            </div>
+            </div>
+
+            </div>
           </div>
   
-          <div className=" w-[45%]">
+          <div className="flex justify-center w-[50%]"
+          style={{
+            marginTop: "20px"
+          }}
+          >
             <img
               src={KidImage}
               alt="Hero Kid"
-              className="rounded-lg border-4 border-yellow-400"
+              width={"400px"}
             />
-            <div className="bg-yellow-400 text-black text-sm font-semibold px-4 py-2 rounded-full">
-              24h
-            </div>
           </div>
         </div>
 
-        {/* <div className="mt-16 bg-white text-black rounded-lg py-6 px-8 grid grid-cols-2 md:grid-cols-4 gap-8 shadow-lg">
+        <div 
+        style={{
+          margin: "20px auto",
+          padding: "20px 0"
+        }}
+        className="w-[80%] flex items-center justify-center bg-white text-black rounded-full py-6 px-8 grid grid-cols-2 md:grid-cols-4 gap-8 shadow-lg">
           <div className="text-center">
             <h3 className="text-3xl font-bold">850+</h3>
             <p className="text-sm text-gray-600">Total Donation Received</p>
@@ -47,7 +65,7 @@ export default function HeroSection() {
             <h3 className="text-3xl font-bold">35+</h3>
             <p className="text-sm text-gray-600">Charity in Last Year</p>
           </div>
-        </div> */}
+        </div>
 
       </section>
     );
