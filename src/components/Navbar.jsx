@@ -38,7 +38,7 @@ export default function Navbar() {
           </a>
         </div>
 
-        <button className="md:block hidden yellowBtn">
+        <button className="md:block hidden yellowBtn ">
             Donate Now
           </button>
 

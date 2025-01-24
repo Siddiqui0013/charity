@@ -25,3 +25,15 @@
   font-weight: 700;
   text-align: center;
 }
+
+#hero{
+  background-image: url("./assets/hero.png")  ;
+  background-size: contain;
+  background-size: cover;
+  background-position: bottom;
+  background-repeat: no-repeat;
+  width: 100%;
+  color: #fff;
+  min-height: 100vh;
+  text-align: center;
+}
