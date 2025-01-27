@@ -4,6 +4,7 @@ import { ArrowRight } from 'lucide-react'
 import About from '../components/About'
 import OurTeam from '../components/team/OurTeam'
 import DonateUs from '../components/DonateUs'
+import NewsArticles from '../components/NewsArticles'
 
 const Home = () => {
     return (
@@ -33,6 +34,7 @@ const Home = () => {
             <About />
             <OurTeam />
             <DonateUs />
+            <NewsArticles />
         </main>
     )
 }
