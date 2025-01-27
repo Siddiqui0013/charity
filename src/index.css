@@ -1,19 +1,16 @@
 @import url('https://fonts.cdnfonts.com/css/pp-neue-montreal');
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme {
-  --color-primary: #01705C;
-  --color-secondary: #FFD249;
-}
-
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "PP Neue Montreal", "sans-serif";
 }
 
-.yellowBtn{
+.yellowBtn {
   padding: 10px 20px;
   border-radius: 20px;
   background-color: var(--color-secondary);
@@ -26,8 +23,8 @@
   text-align: center;
 }
 
-#hero{
-  background-image: url("./assets/hero.png")  ;
+#hero {
+  background-image: url("./assets/hero.png");
   background-size: contain;
   background-size: cover;
   background-position: bottom;
