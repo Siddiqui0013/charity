@@ -8,6 +8,7 @@ import OurTeam from '../components/team/OurTeam'
 import DonateUs from '../components/DonateUs'
 import NewsArticles from '../components/NewsArticles'
 import BookSlider from '../components/book/Books'
+import Partners from '../components/Partners'
 
 const Home = () => {
     return (
@@ -41,6 +42,7 @@ const Home = () => {
             <BookSlider />
             <DonateUs />
             <NewsArticles />
+            <Partners />
         </main>
     )
 }
