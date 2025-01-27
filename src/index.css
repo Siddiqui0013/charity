@@ -3,6 +3,11 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-primary: #01705C;
+  --color-secondary: #FFD249;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -24,7 +29,7 @@
 }
 
 #hero {
-  background-image: url("./assets/hero.png");
+  background-image: url("./assets/hero/hero.png");
   background-size: contain;
   background-size: cover;
   background-position: bottom;
