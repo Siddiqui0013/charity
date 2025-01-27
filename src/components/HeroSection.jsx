@@ -42,13 +42,9 @@ export default function HeroSection() {
             />
           </div>
         </div>
+      </div>
 
-        <div 
-        style={{
-          margin: "20px auto",
-          padding: "20px 0"
-        }}
-        className="w-[80%] flex items-center justify-center bg-white text-black rounded-full py-6 px-8 grid grid-cols-2 md:grid-cols-4 gap-8 shadow-lg">
+
           <div className="text-center">
             <h3 className="text-3xl font-bold">850+</h3>
             <p className="text-sm text-gray-600">Total Donation Received</p>
@@ -67,7 +63,6 @@ export default function HeroSection() {
           </div>
         </div>
 
-      </section>
-    );
-  }
-  
+    </section>
+  );
+}
