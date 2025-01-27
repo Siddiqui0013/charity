@@ -3,6 +3,7 @@ import HeroSection from '../components/HeroSection'
 import WhoWeAre from '../components/WhoWeAre'
 import { ArrowRight } from 'lucide-react'
 import About from '../components/About'
+import Volunteers from '../components/Volunteers'
 
 const Home = () => {
     return (
@@ -30,6 +31,7 @@ const Home = () => {
                 </div>
             </div>
             <About />
+            <Volunteers />
         </main>
     )
 }
