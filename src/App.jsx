@@ -1,16 +1,26 @@
 import './App.css'
-import HeroSection from './components/HeroSection'
-import Navbar from './components/Navbar'
-import OurTeam from './components/team/OurTeam'
-// import WhoWeAre from './components/WhoWeAre'
+import Layout from './Layout/Layout'
+import Home from './pages/Home'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+
 function App() {
+
+  const BrowserRouter = createBrowserRouter([
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        {
+          path: "/",
+          element: <Home />
+        }
+      ]
+    }
+  ])
 
   return (
     <>
-      <Navbar />
-      <HeroSection />
-      <OurTeam />
-      {/* <WhoWeAre /> */}
+      <RouterProvider router={BrowserRouter} />
     </>
   )
 }
