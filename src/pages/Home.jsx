@@ -1,10 +1,12 @@
-import React from 'react'
 import HeroSection from '../components/HeroSection'
 import WhoWeAre from '../components/WhoWeAre'
 import { ArrowRight } from 'lucide-react'
 import About from '../components/About'
 import Volunteers from '../components/Volunteers'
 import SocialEvents from '../components/SocialEvents'
+import OurTeam from '../components/team/OurTeam'
+import DonateUs from '../components/DonateUs'
+import NewsArticles from '../components/NewsArticles'
 
 const Home = () => {
     return (
@@ -34,6 +36,9 @@ const Home = () => {
             <About />
             <Volunteers />
             <SocialEvents />
+            <OurTeam />
+            <DonateUs />
+            <NewsArticles />
         </main>
     )
 }

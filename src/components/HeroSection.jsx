@@ -8,7 +8,7 @@ const HeroSection = function () {
 	return (
 		<div className="h-screen"
     id="hero">
-			<Carousel className="w-full" slide={false}>
+			<Carousel className="w-full" slide={true} leftControl={<span className="bg-[#252838]"></span>} rightControl={<span className="bg-[#252838]"></span>}>
 				<div className="flex md:flex-row flex-col gap-8 md:w-[90%] w-full mx-auto items-center">
 					<div className="md:w-[50%] w-full flex items-center justify-center">
 						<div className="flex flex-col gap-8 w-[90%] mx-auto">
