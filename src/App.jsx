@@ -1,6 +1,7 @@
 import './App.css'
-import HeroSection from './components/hero/HeroSection'
+import HeroSection from './components/HeroSection'
 import Navbar from './components/Navbar'
+import OurTeam from './components/team/OurTeam'
 // import WhoWeAre from './components/WhoWeAre'
 function App() {
 
@@ -8,6 +9,7 @@ function App() {
     <>
       <Navbar />
       <HeroSection />
+      <OurTeam />
       {/* <WhoWeAre /> */}
     </>
   )

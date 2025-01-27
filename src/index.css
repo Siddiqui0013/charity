@@ -29,7 +29,7 @@
 }
 
 #hero {
-  background-image: url("./assets/hero.png");
+  background-image: url("./assets/hero/hero.png");
   background-size: contain;
   background-size: cover;
   background-position: bottom;
