@@ -1,8 +1,7 @@
 import './App.css'
-
-import HeroSection from './components/HeroSection'
+import HeroSection from './components/hero/HeroSection'
 import Navbar from './components/Navbar'
-import WhoWeAre from './components/WhoWeAre'
+// import WhoWeAre from './components/WhoWeAre'
 function App() {
 
   return (
