@@ -43,11 +43,11 @@ const HeroSection = function () {
 							</div>
 						</div>
 					</div>
-
 					<div className="flex justify-center w-[50%]">
 						<img src={HeroSlider1} alt="Hero Kid" width={"400px"} />
 					</div>
 				</div>
+
 
 				<div className="flex md:flex-row flex-col gap-8 md:w-[90%] w-full mx-auto items-center">
 					<div className="w-full md:w-[50%] flex items-center justify-center">
