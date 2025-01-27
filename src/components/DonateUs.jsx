@@ -1,5 +1,4 @@
 import { Carousel } from 'flowbite-react';
-import { useRef } from 'react';
 
 const DonationSection = () => {
 
@@ -59,19 +58,7 @@ const DonationSection = () => {
       progress: 77
     }
   ];
-  const carouselRef = useRef(null);
 
-  const handleNext = () => {
-    if (carouselRef.current) {
-      carouselRef.current.next();
-    }
-  };
-  
-  const handlePrevious = () => {
-    if (carouselRef.current) {
-      carouselRef.current.previous();
-    }
-  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
@@ -85,17 +72,11 @@ const DonationSection = () => {
       </div>
 
       <div className="relative"> 
-      <button
-  className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-primary text-white p-3 rounded-full hover:bg-primary/90 transition-colors"
-  onClick={handlePrevious}
->
-  ←
-</button>
 
-        <div className="h-[600px] px-12">
-        <Carousel ref={carouselRef} slide={true} pauseOnHover indicators={true}>
+        <div className="h-[600px]">
+        <Carousel slide={true} indicators={true}>
             {[0, 1].map((index) => (
-              <div key={index} className="flex gap-6 px-4">
+              <div key={index} className="flex gap-6 ">
                 {donations.slice(index * 3, (index * 3) + 3).map((donation, idx) => (
                   <div 
                     key={idx}
@@ -148,12 +129,6 @@ const DonationSection = () => {
           </Carousel>
         </div>
 
-        <button
-  className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-primary text-white p-3 rounded-full hover:bg-primary/90 transition-colors"
-  onClick={handleNext}
->
-  →
-</button>
       </div>
     </div>
   );
