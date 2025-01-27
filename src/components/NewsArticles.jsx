@@ -1,4 +1,5 @@
 const NewsGrid = () => {
+
   const newsItems = [
     {
       id: 1,
@@ -39,19 +40,33 @@ const NewsGrid = () => {
   ];
 
   return (
-    <div className="container text-center mx-auto px-4">
-			<div className="text-center my-12">
-				<span className="text-sm font-medium text-primary mb-2 block">
-					NEWS FEED
-				</span>
-				<h2 className="text-3xl font-bold text-gray-900">Latest News & <span className="text-primary">Articles</span></h2>
-			</div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-12">
+    <div className="max-w-6xl text-center mx-auto px-4">
+      <div className="text-center my-12">
+        <span className="text-sm font-medium text-primary mb-2 block">
+          NEWS FEED
+        </span>
+        <h2 className="text-3xl font-bold text-gray-900">Latest News & <span className="text-primary">Articles</span></h2>
+      </div>
+
+      <div className="grid grid-cols-12 grid-rows-12 gap-3 my-12">
         {newsItems.map((item) => (
-          <div key={item.id} className="relative rounded-lg overflow-hidden shadow-lg ">
-            <img 
-              src={item.image} 
+          <div
+            key={item.id}
+            className={`relative rounded-lg overflow-hidden shadow-lg ${item.id === 1
+                ? "lg:col-span-6 lg:row-span-5 col-span-12 row-span-12"
+                : item.id === 2
+                  ? "lg:col-span-3 lg:row-span-7 col-span-12 row-span-12"
+                  : item.id === 3
+                    ? "lg:col-span-3 lg:row-span-7 col-span-12 row-span-12"
+                    : item.id === 4
+                      ? "lg:col-span-3 lg:row-span-7 col-span-12 row-span-12"
+                      : item.id === 5
+                        ? "lg:col-span-3 lg:row-span-7 col-span-12 row-span-12"
+                        : "lg:col-span-6 lg:row-span-5 col-span-12 row-span-12"
+              }`}
+          >
+            <img
+              src={item.image}
               alt={item.title}
               className="w-full h-48 object-cover"
             />
