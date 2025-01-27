@@ -7,6 +7,7 @@ import SocialEvents from '../components/SocialEvents'
 import OurTeam from '../components/team/OurTeam'
 import DonateUs from '../components/DonateUs'
 import NewsArticles from '../components/NewsArticles'
+import BookSlider from '../components/book/Books'
 import Partners from '../components/Partners'
 
 const Home = () => {
@@ -38,6 +39,7 @@ const Home = () => {
             <Volunteers />
             <SocialEvents />
             <OurTeam />
+            <BookSlider />
             <DonateUs />
             <NewsArticles />
             <Partners />
