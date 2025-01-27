@@ -1,8 +1,9 @@
-import React from 'react'
 import HeroSection from '../components/HeroSection'
 import WhoWeAre from '../components/WhoWeAre'
 import { ArrowRight } from 'lucide-react'
 import About from '../components/About'
+import OurTeam from '../components/team/OurTeam'
+import DonateUs from '../components/DonateUs'
 
 const Home = () => {
     return (
@@ -30,6 +31,8 @@ const Home = () => {
                 </div>
             </div>
             <About />
+            <OurTeam />
+            <DonateUs />
         </main>
     )
 }
