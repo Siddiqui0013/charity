@@ -42,7 +42,7 @@ export default function WhoWeAre() {
             icon={<BookA size={30} />}
             IconClr="text-[#99EDCC]"
             Title="Books"
-            description="Publications by Co-Founder Leonard Akathingo addressing key societal challenges and inspiring change."
+            description="Our NGO has authored 13 insightful books on mental health, serving as powerful tools to raise awareness, break stigmas, and foster understanding."
             className="bg-[#99EDCC]"
           />
         </div>
