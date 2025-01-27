@@ -7,6 +7,7 @@ import SocialEvents from '../components/SocialEvents'
 import OurTeam from '../components/team/OurTeam'
 import DonateUs from '../components/DonateUs'
 import NewsArticles from '../components/NewsArticles'
+import BookSlider from '../components/book/Books'
 
 const Home = () => {
     return (
@@ -37,6 +38,7 @@ const Home = () => {
             <Volunteers />
             <SocialEvents />
             <OurTeam />
+            <BookSlider />
             <DonateUs />
             <NewsArticles />
         </main>

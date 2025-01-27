@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import EventCard from './ui/EventCard';
 
 const SocialEvents = () => {
@@ -56,8 +56,21 @@ const SocialEvents = () => {
     ];
 
     const [currentPage, setCurrentPage] = useState(0);
-    const eventsPerPage = 3;
-    const totalPages = Math.ceil(allEvents.length / eventsPerPage);
+    const [ isMobile, setIsMobile ] = useState(false);
+
+      useEffect(() => {
+        const checkIsMobile = () => {
+          setIsMobile(window.innerWidth < 768);
+        };
+    
+        checkIsMobile();
+        window.addEventListener('resize', checkIsMobile);
+    
+        return () => window.removeEventListener('resize', checkIsMobile);
+      }, []);
+
+      const eventsPerPage = isMobile ? 1 : 3;
+      const totalPages = Math.ceil(allEvents.length / eventsPerPage);
 
     const currentEvents = allEvents.slice(
         currentPage * eventsPerPage,
@@ -111,6 +124,7 @@ const SocialEvents = () => {
                         </button>
                     </div>
                 </div>
+                
             </div>
 
             <div className="space-y-6 transition-all duration-300">

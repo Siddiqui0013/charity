@@ -6,7 +6,7 @@ export default function Navbar() {
 
   return (
     <nav className="w-full bg-green-700 text-white">
-      <div className="mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-around h-16">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
         <div className="flex items-center">
           {/* <img
             src="/logo.png"
@@ -53,7 +53,7 @@ export default function Navbar() {
       </div>
 
       {isOpen && (
-        <div className="md:hidden bg-green-700">
+        <div className="md:hidden py-6 bg-green-700 flex flex-col gap-2 items-center">
           <a href="#" className="block px-4 py-2 hover:bg-green-600">
             Home
           </a>
@@ -72,7 +72,7 @@ export default function Navbar() {
           <a href="#" className="block px-4 py-2 hover:bg-green-600">
             Blog
           </a>
-          <button className="bg-yellow-400 text-black w-full py-2 hover:bg-yellow-500">
+          <button className="yellowBtn ">
             Donate Now
           </button>
         </div>
