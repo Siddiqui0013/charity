@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <nav className="w-full bg-green-700 text-white">
@@ -14,28 +16,39 @@ export default function Navbar() {
             className="h-10 w-auto"
           /> */}
 
-          <span className="ml-2 text-xl font-bold">Charityed</span>
+          <span className="ml-2 text-xl font-bold cursor-pointer"
+            onClick={() => navigate("/")}
+          >Charityed</span>
         </div>
 
         <div className="hidden md:flex text-xl gap-8 items-center">
-          <a href="#" className="hover:text-gray-200">
+          <span
+          onClick={() => navigate("/")}
+          className="hover:text-gray-200 cursor-pointer">
             Home
-          </a>
-          <a href="#" className="hover:text-gray-200">
+          </span>
+          <span 
+          className="hover:text-gray-200 cursor-pointer"
+          onClick={() => navigate("/about")}
+          >
             About Us
-          </a>
-          <a href="#" className="hover:text-gray-200">
+          </span>
+          <span className="hover:text-gray-200 cursor-pointer"
+          onClick={() => navigate("/donation")}
+          >
             Donation
-          </a>
-          <a href="#" className="hover:text-gray-200">
+          </span>
+          <span className="hover:text-gray-200 cursor-pointer"
+          onClick={() => navigate("/events")}
+          >
             Events
-          </a>
-          <a href="#" className="hover:text-gray-200">
+          </span>
+          <span className="hover:text-gray-200 cursor-pointer">
             Services
-          </a>
-          <a href="#" className="hover:text-gray-200">
+          </span>
+          <span className="hover:text-gray-200 cursor-pointer">
             Blog
-          </a>
+          </span>
         </div>
 
         <button className="md:block hidden yellowBtn ">
@@ -54,24 +67,32 @@ export default function Navbar() {
 
       {isOpen && (
         <div className="md:hidden py-6 bg-green-700 flex flex-col gap-2 items-center">
-          <a href="#" className="block px-4 py-2 hover:bg-green-600">
+          <span className="block px-4 py-2 hover:bg-green-600" 
+          onClick={() => navigate("/")}
+          >
             Home
-          </a>
-          <a href="#" className="block px-4 py-2 hover:bg-green-600">
+          </span>
+          <span className="block px-4 py-2 hover:bg-green-600"
+          onClick={() => navigate("/about")}
+          >
             About Us
-          </a>
-          <a href="#" className="block px-4 py-2 hover:bg-green-600">
+          </span>
+          <span className="block px-4 py-2 hover:bg-green-600"
+          onClick={() => navigate("/donation")}
+          >
             Donation
-          </a>
-          <a href="#" className="block px-4 py-2 hover:bg-green-600">
+          </span>
+          <span className="block px-4 py-2 hover:bg-green-600"
+          onClick={() => navigate("/events")}
+          >
             Events
-          </a>
-          <a href="#" className="block px-4 py-2 hover:bg-green-600">
+          </span>
+          <span className="block px-4 py-2 hover:bg-green-600">
             Services
-          </a>
-          <a href="#" className="block px-4 py-2 hover:bg-green-600">
+          </span>
+          <span className="block px-4 py-2 hover:bg-green-600">
             Blog
-          </a>
+          </span>
           <button className="yellowBtn ">
             Donate Now
           </button>

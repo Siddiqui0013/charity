@@ -1,7 +1,8 @@
-import React from 'react'
 import { ArrowRight } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 const About = () => {
+    const navigate = useNavigate()
     return (
         <div className='py-16 w-full h-full flex justify-center items-center gap-10 lg:flex-row flex-col lg:px-20 sm:px-6 px-3'>
             <div>
@@ -37,8 +38,11 @@ const About = () => {
                     </div>
                 </div>
                 <div>
-                    <button className='bg-primary text-white px-4 py-2 rounded-md flex items-center gap-2 font-medium whitespace-nowrap mt-5'>
+                    <button 
+                    onClick={() => navigate('/about')}
+                    className='bg-primary text-white px-4 py-2 rounded-md flex items-center gap-2 font-medium whitespace-nowrap mt-5'>
                         Read More
+                        
                         <ArrowRight size={17} />
                     </button>
                 </div>
