@@ -130,13 +130,13 @@ export default function Footer() {
                             <a href="#" className="hover:opacity-80">
                                 <Youtube className="w-5 h-5" />
                             </a>
-                        </div>
+                        </div> 
                     </div>
-                </div>
+                </div>   
             </div>
             <div className="border-t border-white/10">
                 <div className="container mx-auto px-4 py-4">
-                    <p className="text-sm text-center">Copyright@charityed 2024 All right Received</p>
+                    <p className="text-sm text-center">Copyright @ Charityed 2025 All right Reserved</p>
                 </div>
             </div>
         </footer>
