@@ -6,6 +6,8 @@ import Donation from './pages/Donation'
 import ViewDonation from './pages/ViewDonation'
 import Events from './pages/Events'
 import ViewEvent from './pages/ViewEvent'
+import DashboardLayout from './Layout/DashboardLayout'
+import Main from './dashboard/Main'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 function App() {
@@ -38,6 +40,16 @@ function App() {
         {
           path: "/event/:id",
           element: <ViewEvent />
+        }
+      ]
+    },
+    {
+      path: "/dashboard",
+      element: <DashboardLayout />,
+      children: [
+        {
+          path: "/dashboard",
+          element: <Main />
         }
       ]
     }
