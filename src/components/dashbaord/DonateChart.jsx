@@ -1,5 +1,3 @@
-"use client"
-
 import { Line, LineChart, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts"
 import { ChevronDown } from "lucide-react"
 
