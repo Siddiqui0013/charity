@@ -22,12 +22,12 @@ export default function Sidebar() {
         {
             icon: <Heart className="w-5 h-5" />,
             label: "Volunteer",
-            href: "/volunteer",
+            href: "/dashboard/volunteer",
         },
         {
             icon: <Newspaper className="w-5 h-5" />,
             label: "News & Articles",
-            href: "/news",
+            href: "/dashboard/news",
         },
         {
             icon: <Calendar className="w-5 h-5" />,

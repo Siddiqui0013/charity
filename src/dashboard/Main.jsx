@@ -1,4 +1,3 @@
-import React from 'react'
 import DonateChart from '../components/dashbaord/DonateChart'
 
 const Main = () => {

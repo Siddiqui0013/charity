@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import DonationCard from '../components/ui/DonationCard'
 import Pagination from '../components/ui/Pagination'
 
@@ -9,7 +9,7 @@ const Donation = () => {
         <div className='py-14 max-w-7xl mx-auto px-4 sm:px-6'>
             <h1 className='mb-7 font-semibold md:text-4xl text-3xl text-center'>Donation Listing</h1>
             <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 sm:gap-5">
-                {Array.from({ length: 6 }).map((_, idx) => (
+                {Array.from({ length: 8 }).map((_, idx) => (
                     <DonationCard key={idx} />
                 ))}
             </div>

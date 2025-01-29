@@ -9,6 +9,8 @@ import ViewEvent from './pages/ViewEvent'
 import DashboardLayout from './Layout/DashboardLayout'
 import Main from './dashboard/Main'
 import Campaigns from './dashboard/Campaigns'
+import Volunteers from './dashboard/Volunteers'
+import NewsArticles from './dashboard/NewsArticles'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 function App() {
@@ -55,6 +57,14 @@ function App() {
         {
           path: "/dashboard/campaigns",
           element: <Campaigns />
+        },
+        {
+          path: "/dashboard/volunteer",
+          element: <Volunteers />
+        },
+        {
+          path: "/dashboard/news",
+          element: <NewsArticles />
         }
       ]
     }

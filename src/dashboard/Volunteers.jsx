@@ -1,67 +1,52 @@
 import { useState } from "react";
-import CampaignModal from "./modals/CampaignModal";
+import VolunteerModal from "./modals/VolunteersModal";
 
-const Campaigns = () => {
+const Volunteers = () => {
 
     const [data, setData] = useState([
         {
             id: 1,
             image: "https://placehold.co/600x400",
-            title: "New School Teachers",
-            description:
-                "Welcoming new school teachers to inspire and educate, shaping a brighter future for students together.",
-            raisedAmount: 9600,
-            goalAmount: 12000,
+            title: "School Teacher",
         },
         {
             id: 2,
             image: "https://placehold.co/600x400",
-            title: "New School Teachers campaign 2",
-            description:
-                "Welcoming new school teachers to inspire and educate, shaping a brighter future for students together.",
-            raisedAmount: 9600,
-            goalAmount: 12000,
+            title: "Content Creator",
         },
     ]);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedCampaign, setSelectedCampaign] = useState(null);
-    const [isEditMode, setIsEditMode] = useState(false);
+    const [ selectedVolunteer, setSelectedVolunteer] = useState(null);
+
     const handleDelete = (id) => {
-        setData((prevData) => prevData.filter((campaign) => campaign.id !== id));
+        console.log(`Deleted with id: ${id}`);
     };
 
     const handleEdit = (campaign) => {
-        setSelectedCampaign(campaign);
-        setIsEditMode(true);
-        setIsModalOpen(true);
-    };
-
-    const handleAdd = () => {
-        setSelectedCampaign(null);
-        setIsEditMode(false);
+        setSelectedVolunteer(campaign);
         setIsModalOpen(true);
     };
 
     const handleModalClose = () => {
         setIsModalOpen(false);
-        setSelectedCampaign(null);
+        setSelectedVolunteer(null);
     };
 
-    const handleSave = (updatedCampaign) => {
-        console.log("Updated campaign:", updatedCampaign);
+    const handleUpdate = () => {
+        console.log("Updated data:", selectedVolunteer);
         setIsModalOpen(false);
     };
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className=" max-w-7xl mx-auto px-4 sm:px-6">
             <div className="flex justify-between items-center mb-4 p-2">
-                <h1 className="text-3xl font-bold text-gray-800">Campaigns</h1>
+                <h1 className="text-3xl font-bold text-gray-800">Volunteers</h1>
                 <button
-                    onClick={handleAdd}
-                    className="bg-primary hover:bg-[#014e3d] text-white px-4 py-2 rounded-md"
+                    onClick={() => setIsModalOpen(true)}
+                    className="px-4 py-2 bg-primary hover:bg-[#014e3d] text-white rounded-xl"
                 >
-                    Add Campaign
+                    Add Volunteer
                 </button>
             </div>
             <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 sm:gap-5">
@@ -86,16 +71,8 @@ const Campaigns = () => {
                                     {campaign.description}
                                 </p>
                             </div>
-                            <div>
-                                <p className="text-sm text-gray-600">
-                                    <strong>Raised:</strong> ${campaign.raisedAmount}
-                                </p>
-                                <p className="text-sm text-gray-600">
-                                    <strong>Goal:</strong> ${campaign.goalAmount}
-                                </p>
-                            </div>
                         </div>
-                        <div className="absolute top-0 right-0 p-3 space-x-2 group-hover:flex">
+                        <div className="absolute top-0 right-0 p-3 space-x-2  group-hover:flex">
                             <button
                                 onClick={() => handleEdit(campaign)}
                                 className="px-4 py-2 text-white rounded-xl bg-primary"
@@ -113,14 +90,14 @@ const Campaigns = () => {
                 ))}
             </div>
 
-            <CampaignModal
+            <VolunteerModal
                 isOpen={isModalOpen}
                 onClose={handleModalClose}
-                campaignData={selectedCampaign}
-                onSave={handleSave}
+                volunteerData={selectedVolunteer}
+                onUpdate={handleUpdate}
             />
         </div>
     );
 };
 
-export default Campaigns;
+export default Volunteers;

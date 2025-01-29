@@ -1,11 +1,9 @@
-import { Facebook, Instagram, PhoneIcon as WhatsApp, Star, ChevronRight } from "lucide-react"
+import { Facebook, Instagram, PhoneIcon as WhatsApp, ChevronRight } from "lucide-react"
 
 export default function DonationCard({
     image = "/placeholder.svg?height=300&width=600",
-    category = "Education",
     title = "New School Teachers",
     description = "Welcoming new school teachers to inspire and educate, shaping a brighter future for students together.",
-    rating = 4.5,
     raisedAmount = 9600,
     goalAmount = 12000,
     progress = 75,
@@ -19,16 +17,6 @@ export default function DonationCard({
 
             {/* Content */}
             <div className="sm:p-6 p-4 space-y-4">
-                {/* Category and Rating */}
-                <div className="flex justify-between items-center">
-                    <div className="bg-[#ffd249] px-4 py-2 rounded-lg -mt-12 relative z-10">
-                        <span className="text-gray-800 font-medium">{category}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <Star className="w-5 h-5 fill-[#ffd249] text-[#ffd249]" />
-                        <span className="text-gray-800 font-semibold">{rating}</span>
-                    </div>
-                </div>
 
                 {/* Title and Description */}
                 <div className="space-y-3">

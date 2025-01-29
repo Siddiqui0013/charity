@@ -1,109 +1,103 @@
 import { useState } from "react";
-import CampaignModal from "./modals/CampaignModal";
+import NewsModal from "./modals/NewsModal";
 
-const Campaigns = () => {
-
+const NewsArticles = () => {
     const [data, setData] = useState([
         {
             id: 1,
             image: "https://placehold.co/600x400",
-            title: "New School Teachers",
-            description:
-                "Welcoming new school teachers to inspire and educate, shaping a brighter future for students together.",
-            raisedAmount: 9600,
-            goalAmount: 12000,
+            title: "School Teacher",
+            description: "An inspiring story about a school teacher making a difference.",
+            writerName: "John Doe",
         },
         {
             id: 2,
             image: "https://placehold.co/600x400",
-            title: "New School Teachers campaign 2",
-            description:
-                "Welcoming new school teachers to inspire and educate, shaping a brighter future for students together.",
-            raisedAmount: 9600,
-            goalAmount: 12000,
+            title: "Content Creator",
+            description: "A day in the life of a creative content creator.",
+            writerName: "Jane Smith",
         },
     ]);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedCampaign, setSelectedCampaign] = useState(null);
-    const [isEditMode, setIsEditMode] = useState(false);
+    const [selectedNews, setSelectedNews] = useState(null);
+    const [isEditing, setIsEditing] = useState(false);
+
     const handleDelete = (id) => {
-        setData((prevData) => prevData.filter((campaign) => campaign.id !== id));
+        setData(data.filter((item) => item.id !== id));
+        console.log(`Deleted news with id: ${id}`);
     };
 
-    const handleEdit = (campaign) => {
-        setSelectedCampaign(campaign);
-        setIsEditMode(true);
+    const handleEdit = (news) => {
+        setSelectedNews(news);
+        setIsEditing(true);
         setIsModalOpen(true);
+        console.log(`Editing news with id: ${news.id}`);
     };
 
     const handleAdd = () => {
-        setSelectedCampaign(null);
-        setIsEditMode(false);
+        setSelectedNews(null);
+        setIsEditing(false);
         setIsModalOpen(true);
+        console.log("Adding new news");
     };
 
     const handleModalClose = () => {
         setIsModalOpen(false);
-        setSelectedCampaign(null);
+        setSelectedNews(null);
     };
 
-    const handleSave = (updatedCampaign) => {
-        console.log("Updated campaign:", updatedCampaign);
+    const handleSave = (news) => {
+            console.log("Updated news:", news);
         setIsModalOpen(false);
     };
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="flex justify-between items-center mb-4 p-2">
-                <h1 className="text-3xl font-bold text-gray-800">Campaigns</h1>
+                <h1 className="text-3xl font-semibold">News & Articles</h1>
                 <button
                     onClick={handleAdd}
-                    className="bg-primary hover:bg-[#014e3d] text-white px-4 py-2 rounded-md"
+                    className="px-4 py-2 text-white rounded-xl bg-primary hover:bg-[#014e3d]"
                 >
-                    Add Campaign
+                    Add News
                 </button>
             </div>
             <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 sm:gap-5">
-                {data.map((campaign) => (
+                {data.map((news) => (
                     <div
-                        key={campaign.id}
+                        key={news.id}
                         className="relative max-w-xl bg-white rounded-3xl overflow-hidden shadow hover:shadow-xl transition-shadow"
                     >
                         <div className="w-full h-64 bg-gray-200">
                             <img
-                                src={campaign.image || "/placeholder.svg"}
-                                alt={campaign.title}
+                                src={news.image || "/placeholder.svg"}
+                                alt={news.title}
                                 className="w-full h-full object-cover"
                             />
                         </div>
                         <div className="sm:p-6 p-4 space-y-4">
                             <div className="space-y-3">
                                 <h2 className="lg:text-2xl text-xl font-bold text-gray-800">
-                                    {campaign.title}
+                                    {news.title}
                                 </h2>
                                 <p className="text-gray-400 text-base">
-                                    {campaign.description}
+                                    {news.description}
                                 </p>
-                            </div>
-                            <div>
-                                <p className="text-sm text-gray-600">
-                                    <strong>Raised:</strong> ${campaign.raisedAmount}
-                                </p>
-                                <p className="text-sm text-gray-600">
-                                    <strong>Goal:</strong> ${campaign.goalAmount}
+                                <p className="text-gray-600 text-sm italic">
+                                    Written by: {news.writerName}
                                 </p>
                             </div>
                         </div>
                         <div className="absolute top-0 right-0 p-3 space-x-2 group-hover:flex">
                             <button
-                                onClick={() => handleEdit(campaign)}
+                                onClick={() => handleEdit(news)}
                                 className="px-4 py-2 text-white rounded-xl bg-primary"
                             >
                                 Edit
                             </button>
                             <button
-                                onClick={() => handleDelete(campaign.id)}
+                                onClick={() => handleDelete(news.id)}
                                 className="px-4 py-2 bg-red-500 text-white rounded-xl"
                             >
                                 Delete
@@ -113,14 +107,17 @@ const Campaigns = () => {
                 ))}
             </div>
 
-            <CampaignModal
-                isOpen={isModalOpen}
-                onClose={handleModalClose}
-                campaignData={selectedCampaign}
-                onSave={handleSave}
-            />
+            {isModalOpen && (
+                <NewsModal
+                    isOpen={isModalOpen}
+                    onClose={handleModalClose}
+                    newsData={selectedNews}
+                    onSave={handleSave}
+                    isEditing={isEditing}
+                />
+            )}
         </div>
     );
 };
 
-export default Campaigns;
+export default NewsArticles;

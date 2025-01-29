@@ -4,7 +4,6 @@ const DonationSection = () => {
   const donations = [
     {
       title: "Popya Mobile App",
-      rating: "4.9",
       image: "https://placehold.co/600x400",
       description: "Support our mobile app development to help connect donors with those in need. Your donation will help us provide essential resources and services.",
       raised: 85000,
@@ -13,7 +12,6 @@ const DonationSection = () => {
     },
     {
       title: "Awareness Campaigns",
-      rating: "3.5",
       image: "https://placehold.co/600x400",
       description: "Help us spread awareness about poverty and homelessness through targeted campaigns. Together we can make a difference.",
       raised: 58000,
@@ -22,7 +20,6 @@ const DonationSection = () => {
     },
     {
       title: "Media Outreach",
-      rating: "3.0",
       image: "https://placehold.co/600x400",
       description: "Support our media initiatives to reach more people and create lasting impact in communities worldwide.",
       raised: 510800,
@@ -31,7 +28,6 @@ const DonationSection = () => {
     },
     {
       title: "Education Program",
-      rating: "4.2",
       image: "https://placehold.co/600x400",
       description: "Help provide education and learning resources to underprivileged children and youth in need.",
       raised: 75000,
@@ -40,7 +36,6 @@ const DonationSection = () => {
     },
     {
       title: "Healthcare Support",
-      rating: "4.7",
       image: "https://placehold.co/600x400",
       description: "Support medical care and health services for those who cannot afford essential healthcare.",
       raised: 92000,
@@ -49,7 +44,6 @@ const DonationSection = () => {
     },
     {
       title: "Healthcare Support",
-      rating: "4.7",
       image: "https://placehold.co/600x400",
       description: "Support medical care and health services for those who cannot afford essential healthcare.",
       raised: 92000,
@@ -144,10 +138,6 @@ const DonationSection = () => {
             <div className="p-6">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-xl font-semibold">{donation.title}</h3>
-                <div className="flex items-center gap-1">
-                  <span className="text-yellow-400">★</span>
-                  <span className="font-medium">{donation.rating}</span>
-                </div>
               </div>
               <p className="text-gray-600 mb-6 text-sm">
                 {donation.description}
