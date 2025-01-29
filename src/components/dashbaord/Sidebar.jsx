@@ -1,26 +1,23 @@
-import { Home, BarChart3, Flag, Heart, Newspaper, Calendar, Users, Wallet, Menu, X } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Home, Flag, Heart, Newspaper, Calendar, Users, Wallet, Menu, X } from "lucide-react"
+import { NavLink, useLocation } from "react-router-dom"
 import { useState } from "react"
 
 export default function Sidebar() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+    const location = useLocation()
+
+    const active = (href) => location.pathname === href
 
     const navItems = [
         {
             icon: <Home className="w-5 h-5" />,
             label: "Dashboard",
             href: "/dashboard",
-            isActive: true,
-        },
-        {
-            icon: <BarChart3 className="w-5 h-5" />,
-            label: "Analytics",
-            href: "/analytics",
         },
         {
             icon: <Flag className="w-5 h-5" />,
             label: "Campaigns",
-            href: "/campaigns",
+            href: "/dashboard/campaigns",
         },
         {
             icon: <Heart className="w-5 h-5" />,
@@ -78,20 +75,20 @@ export default function Sidebar() {
 
                 <nav className="space-y-1">
                     {navItems.map((item) => (
-                        <Link
+                        <NavLink
                             key={item.href}
                             to={item.href}
                             onClick={() => setIsSidebarOpen(false)}
-                            className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-colors ${item.isActive ? "bg-[#01705c] text-white" : "text-[#616161] hover:bg-gray-100"
-                                }`}
+                            className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-colors ${active(item.href) ? "bg-[#01705c] text-white" : "text-[#616161] hover:bg-gray-100"}`}
                         >
                             {item.icon}
                             <span className="font-medium">{item.label}</span>
-                        </Link>
+                        </NavLink>
                     ))}
                 </nav>
             </div>
         </>
     )
 }
+
 
