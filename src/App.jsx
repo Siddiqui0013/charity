@@ -11,7 +11,9 @@ import Main from './dashboard/Main'
 import Campaigns from './dashboard/Campaigns'
 import Volunteers from './dashboard/Volunteers'
 import NewsArticles from './dashboard/NewsArticles'
+import AdminLogin from './pages/Login'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { ToastProvider } from './components/ui/Toast'
 
 function App() {
 
@@ -67,12 +69,18 @@ function App() {
           element: <NewsArticles />
         }
       ]
+    },
+    {
+      path: "/login",
+      element: <AdminLogin />
     }
   ])
 
   return (
     <>
-      <RouterProvider router={BrowserRouter} />
+      <ToastProvider>
+        <RouterProvider router={BrowserRouter} />
+      </ToastProvider>
     </>
   )
 }
