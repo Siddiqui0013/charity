@@ -1,4 +1,4 @@
-import { Home, Flag, Heart, Newspaper, Calendar, Users, Wallet, Menu, X } from "lucide-react"
+import { Home, Flag, Heart, Newspaper, Calendar, Users, Wallet, Menu, X, LogOut } from "lucide-react"
 import { NavLink, useLocation } from "react-router-dom"
 import { useState } from "react"
 
@@ -46,6 +46,11 @@ export default function Sidebar() {
         },
     ]
 
+    const handleLogout = () => {
+        localStorage.removeItem("authToken")
+        window.location.href = "/login"
+    }
+
     return (
         <>
             {/* Mobile Menu Button */}
@@ -86,6 +91,11 @@ export default function Sidebar() {
                         </NavLink>
                     ))}
                 </nav>
+                <button className="flex items-center gap-3 px-3 py-3 rounded-lg transition-colors text-white font-medium w-full hover:bg-primary/90 bg-primary mt-8" onClick={handleLogout}>
+                    <LogOut className="w-5 h-5" />
+                    Sign Out
+                </button>
+
             </div>
         </>
     )
