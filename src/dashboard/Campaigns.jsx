@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import CampaignModal from "./modals/CampaignModal";
+import DeleteModal from "./modals/DeleteModal";
 import axiosInstance from "../api/axios";
+import Skeleton from "../components/ui/Skeleton";
 import { useToast } from "../hooks/useToast"; // Assuming you have the toast hook set up
 
 const Campaigns = () => {
@@ -10,7 +12,18 @@ const Campaigns = () => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [loading, setLoading] = useState(true);
     const [apiLoader, setApiLoader] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const toast = useToast();
+
+    const handleDeleteModalOpen = (campaign) => {
+        setSelectedCampaign(campaign);
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleDeleteModalClose = () => {
+        setSelectedCampaign(null);
+        setIsDeleteModalOpen(false);
+    };
 
     // Fetch campaigns on component mount
     useEffect(() => {
@@ -20,11 +33,8 @@ const Campaigns = () => {
     const fetchCampaigns = async () => {
         try {
             setLoading(true);
-            const response = await fetch("https://project116-backend.vercel.app/api/donations");
-            const data = await response.json();
-            console.log(data);
-
-            setData(data.data);
+            const response = await axiosInstance.get("/donations");
+            setData(response?.data.data || []);
         } catch (error) {
             console.error("Error fetching campaigns:", error);
             toast("Failed to fetch campaigns", "error");
@@ -33,14 +43,18 @@ const Campaigns = () => {
         }
     };
 
-    const handleDelete = async (id) => {
+    const handleDelete = async () => {
         try {
-            await axiosInstance.delete(`/donation/${id}`);
-            setData((prevData) => prevData.filter((campaign) => campaign.id !== id));
+            setApiLoader(true);
+            await axiosInstance.delete(`/donation/${selectedCampaign._id}`);
+            setData((prevData) => prevData.filter((campaign) => campaign._id !== selectedCampaign._id));
             toast("Campaign deleted successfully", "success");
         } catch (error) {
             console.error("Error deleting campaign:", error);
             toast("Failed to delete campaign", "error");
+        } finally {
+            setApiLoader(false);
+            handleDeleteModalClose();
         }
     };
 
@@ -67,10 +81,10 @@ const Campaigns = () => {
             setApiLoader(true);
             if (isEditMode) {
                 // Update existing campaign
-                const response = await axiosInstance.put(`/donation/${campaignData.id}`, campaignData);
+                const response = await axiosInstance.put(`/donation/${campaignData._id}`, campaignData);
                 setData(prevData =>
                     prevData.map(item =>
-                        item.id === campaignData.id ? response.data : item
+                        item._id === campaignData._id ? response.data.data : item
                     )
                 );
                 toast("Campaign updated successfully", "success");
@@ -78,7 +92,7 @@ const Campaigns = () => {
                 // Add new campaign
                 try {
                     const response = await axiosInstance.post("/donation", campaignData);
-                    setData(prevData => [...prevData, response.data]);
+                    setData(prevData => [...prevData, response.data.data]);
                     toast("Campaign created successfully", "success");
                 } catch (error) {
                     toast("Failed to create campaign", "error");
@@ -96,10 +110,14 @@ const Campaigns = () => {
     if (loading) {
         return (
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
+                <div className="flex justify-between my-5 p-2">
+                    <Skeleton className="bg-black w-28 h-5" />
+                    <Skeleton className="bg-black w-32 h-8" />
+                </div>
                 <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 sm:gap-5">
-                    {[1, 2, 3].map((index) => (
+                    {[1, 2, 3, 4, 5, 6].map((index) => (
                         <div key={index} className="animate-pulse">
-                            <div className="h-64 bg-gray-200 rounded-t-3xl"></div>
+                            <div className="h-48 bg-gray-200 rounded-t-3xl"></div>
                             <div className="p-4 space-y-4 bg-white rounded-b-3xl">
                                 <div className="h-6 bg-gray-200 rounded w-3/4"></div>
                                 <div className="h-4 bg-gray-200 rounded w-full"></div>
@@ -126,7 +144,7 @@ const Campaigns = () => {
             <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 sm:gap-5">
                 {data?.map((campaign) => (
                     <div
-                        key={campaign.id}
+                        key={campaign._id}
                         className="relative max-w-xl bg-white rounded-3xl overflow-hidden shadow hover:shadow-xl transition-shadow"
                     >
                         <div className="w-full h-48 bg-gray-200">
@@ -162,7 +180,7 @@ const Campaigns = () => {
                                 Edit
                             </button>
                             <button
-                                onClick={() => handleDelete(campaign.id)}
+                                onClick={() => handleDeleteModalOpen(campaign)}
                                 className="px-4 py-2 bg-red-500 text-white rounded-xl"
                             >
                                 Delete
@@ -178,7 +196,10 @@ const Campaigns = () => {
                 campaignData={selectedCampaign}
                 onSave={handleSave}
                 isEditMode={isEditMode}
+                isLoading={apiLoader}
             />
+
+            <DeleteModal isOpen={isDeleteModalOpen} onClose={handleDeleteModalClose} onDelete={handleDelete} isLoading={apiLoader} />
         </div>
     );
 };
