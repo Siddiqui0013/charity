@@ -3,6 +3,7 @@ import { Loader } from "lucide-react";
 
 const CampaignModal = ({ isOpen, onClose, campaignData, onSave, isEditMode, isLoading }) => {
     const [formData, setFormData] = useState({
+        _id: "",
         title: "",
         description: "",
         reached: "",
@@ -13,6 +14,7 @@ const CampaignModal = ({ isOpen, onClose, campaignData, onSave, isEditMode, isLo
     useEffect(() => {
         if (campaignData) {
             setFormData({
+                ...campaignData,
                 title: campaignData.title || "",
                 description: campaignData.description || "",
                 reached: campaignData.reached || "",
