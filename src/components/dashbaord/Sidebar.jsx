@@ -1,4 +1,4 @@
-import { Home, Flag, Heart, Newspaper, Calendar, Users, Wallet, Menu, X, LogOut } from "lucide-react"
+import { Home, Flag, Heart, Newspaper, Calendar, Users, Menu, X, LogOut } from "lucide-react"
 import { NavLink, useLocation } from "react-router-dom"
 import { useState } from "react"
 
@@ -32,17 +32,12 @@ export default function Sidebar() {
         {
             icon: <Calendar className="w-5 h-5" />,
             label: "Events",
-            href: "/events",
+            href: "/dashboard/events",
         },
         {
             icon: <Users className="w-5 h-5" />,
             label: "Team",
-            href: "/team",
-        },
-        {
-            icon: <Wallet className="w-5 h-5" />,
-            label: "Payout",
-            href: "/payout",
+            href: "/dashboard/team",
         },
     ]
 
@@ -53,7 +48,6 @@ export default function Sidebar() {
 
     return (
         <>
-            {/* Mobile Menu Button */}
             <button
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                 className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-md"
@@ -61,12 +55,10 @@ export default function Sidebar() {
                 {!isSidebarOpen && <Menu className="w-6 h-6 text-gray-600" />}
             </button>
 
-            {/* Overlay */}
             {isSidebarOpen && (
                 <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setIsSidebarOpen(false)} />
             )}
 
-            {/* Sidebar */}
             <div
                 className={`fixed lg:static inset-y-0 left-0 z-40 w-64 transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
                     } min-h-screen bg-white border-r border-gray-200 px-3 py-6`}
@@ -100,5 +92,3 @@ export default function Sidebar() {
         </>
     )
 }
-
-

@@ -5,35 +5,6 @@ import Skeleton from '../components/ui/Skeleton';
 
 const Main = () => {
 
-    // const metrics = [
-    //     {
-    //         title: "Total Donations",
-    //         value: "53.577,22",
-    //         format: "currency",
-    //     },
-    //     {
-    //         title: "Active Campaigns",
-    //         value: 53,
-    //     },
-    //     {
-    //         title: "New Donors This Month",
-    //         value: 12,
-    //     },
-    //     {
-    //         title: "Volunteer Registrations",
-    //         value: 15,
-    //     },
-    // ]
-
-    // const metrics2 = [
-    //     { title: "Campaigns", value: 10 },
-    //     { title: "Volunteer", value: 10 },
-    //     { title: "News & Articles", value: 10 },
-    //     { title: "Events", value: 10 },
-    //     { title: "Team", value: 10 },
-    //     { title: "Donations", value: 10 },
-    // ]
-
     const [metrics, setMetrics] = useState({});
     const [loading, setLoading] = useState(true);
 

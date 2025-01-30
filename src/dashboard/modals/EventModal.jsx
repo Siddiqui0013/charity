@@ -3,34 +3,24 @@
 import { useState, useEffect } from "react";
 import { Loader } from "lucide-react";
 
-const CampaignModal = ({ isOpen, onClose, campaignData, onSave, isEditMode, isLoading }) => {
+const EventModal = ({ isOpen, onClose, eventData, onSave, isEditMode, isLoading }) => {
     const [formData, setFormData] = useState({
         title: "",
-        description: "",
-        reached: "",
-        goal: "",
-        picture: "", 
+        picture: "",
+        date : "",
+        author : "", 
     });
 
     useEffect(() => {
-        if (campaignData) {
+        if (eventData) {
             setFormData({
-                title: campaignData.title || "",
-                description: campaignData.description || "",
-                reached: campaignData.reached || "",
-                goal: campaignData.goal || "",
-                picture: campaignData.picture || "",
-            });
-        } else {
-            setFormData({
-                title: "",
-                description: "",
-                reached: "",
-                goal: "",
-                picture: "",
+                title: eventData.title || "",
+                picture: eventData.picture || "",
+                date : eventData.date || "",
+                author : eventData.author || "",
             });
         }
-    }, [campaignData]);
+    }, [eventData]);
 
     if (!isOpen) return null;
 
@@ -45,12 +35,11 @@ const CampaignModal = ({ isOpen, onClose, campaignData, onSave, isEditMode, isLo
     const handleSave = () => {
         const updatedData = {
             ...formData,
-            reached: parseFloat(formData.reached),
-            goal: parseFloat(formData.goal),
-        };
+            date : formData.date,
+            author : formData.author,};
 
-        if (isEditMode && campaignData) {
-            updatedData.id = campaignData.id;
+        if (isEditMode && eventData) {
+            updatedData.id = eventData.id;
         }
 
         onSave(updatedData);

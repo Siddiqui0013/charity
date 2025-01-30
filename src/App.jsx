@@ -11,6 +11,7 @@ import Main from './dashboard/Main'
 import Campaigns from './dashboard/Campaigns'
 import Volunteers from './dashboard/Volunteers'
 import NewsArticles from './dashboard/NewsArticles'
+import DashboardEvents from "./dashboard/Events"
 import AdminLogin from './pages/Login'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { ToastProvider } from './components/ui/Toast'
@@ -67,6 +68,10 @@ function App() {
         {
           path: "/dashboard/news",
           element: <NewsArticles />
+        },
+        {
+          path: "/dashboard/events",
+          element: <DashboardEvents />
         }
       ]
     },
