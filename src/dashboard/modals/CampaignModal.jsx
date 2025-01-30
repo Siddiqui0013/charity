@@ -1,44 +1,70 @@
-/* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
+import { Loader } from "lucide-react";
 
-const CampaignModal = ({ isOpen, onClose, campaignData, onSave }) => {
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [raisedAmount, setRaisedAmount] = useState("");
-    const [goalAmount, setGoalAmount] = useState("");
+const CampaignModal = ({ isOpen, onClose, campaignData, onSave, isEditMode, isLoading }) => {
+    const [formData, setFormData] = useState({
+        title: "",
+        description: "",
+        reached: "",
+        goal: "",
+        picture: "",  // Added image field
+    });
 
     useEffect(() => {
         if (campaignData) {
-            setTitle(campaignData.title);
-            setDescription(campaignData.description);
-            setRaisedAmount(campaignData.raisedAmount);
-            setGoalAmount(campaignData.goalAmount);
+            setFormData({
+                title: campaignData.title || "",
+                description: campaignData.description || "",
+                reached: campaignData.reached || "",
+                goal: campaignData.goal || "",
+                picture: campaignData.picture || "",
+            });
         } else {
-            setTitle("");
-            setDescription("");
-            setRaisedAmount("");
-            setGoalAmount("");
+            setFormData({
+                title: "",
+                description: "",
+                reached: "",
+                goal: "",
+                picture: "",
+            });
         }
     }, [campaignData]);
 
     if (!isOpen) return null;
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
     const handleSave = () => {
         const updatedData = {
-            ...campaignData,
-            title,
-            description,
-            raisedAmount: parseFloat(raisedAmount),
-            goalAmount: parseFloat(goalAmount),
+            ...formData,
+            reached: parseFloat(formData.reached),
+            goal: parseFloat(formData.goal),
         };
+
+        if (isEditMode && campaignData) {
+            updatedData.id = campaignData.id;
+        }
+
         onSave(updatedData);
+    };
+
+    const validateForm = () => {
+        return formData.title.trim() !== "" &&
+            formData.description.trim() !== "" &&
+            formData.goal > 0;
     };
 
     return (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white rounded-3xl max-w-2xl w-full p-8">
                 <h2 className="text-3xl font-bold mb-6">
-                    {campaignData ? "Edit Campaign" : "Add Campaign"}
+                    {isEditMode ? "Edit Campaign" : "Add Campaign"}
                 </h2>
                 <div className="space-y-4">
                     <div>
@@ -47,8 +73,9 @@ const CampaignModal = ({ isOpen, onClose, campaignData, onSave }) => {
                         </label>
                         <input
                             type="text"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
+                            name="title"
+                            value={formData.title}
+                            onChange={handleChange}
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
@@ -57,10 +84,24 @@ const CampaignModal = ({ isOpen, onClose, campaignData, onSave }) => {
                             Description
                         </label>
                         <textarea
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
+                            name="description"
+                            value={formData.description}
+                            onChange={handleChange}
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             rows="4"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Image URL
+                        </label>
+                        <input
+                            type="text"
+                            name="picture"
+                            value={formData.picture}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="https://example.com/image.jpg"
                         />
                     </div>
                     <div className="flex space-x-4">
@@ -70,8 +111,9 @@ const CampaignModal = ({ isOpen, onClose, campaignData, onSave }) => {
                             </label>
                             <input
                                 type="number"
-                                value={raisedAmount}
-                                onChange={(e) => setRaisedAmount(e.target.value)}
+                                name="reached"
+                                value={formData.reached}
+                                onChange={handleChange}
                                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
@@ -81,8 +123,9 @@ const CampaignModal = ({ isOpen, onClose, campaignData, onSave }) => {
                             </label>
                             <input
                                 type="number"
-                                value={goalAmount}
-                                onChange={(e) => setGoalAmount(e.target.value)}
+                                name="goal"
+                                value={formData.goal}
+                                onChange={handleChange}
                                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
@@ -93,13 +136,17 @@ const CampaignModal = ({ isOpen, onClose, campaignData, onSave }) => {
                         onClick={onClose}
                         className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition"
                     >
-                        Close
+                        Cancel
                     </button>
                     <button
                         onClick={handleSave}
-                        className="px-4 py-2 rounded-lg bg-green-500 text-white hover:bg-green-700 transition"
+                        disabled={!validateForm()}
+                        className={`px-4 py-2 rounded-lg text-white transition ${validateForm()
+                            ? "bg-green-500 hover:bg-green-600"
+                            : "bg-gray-400 cursor-not-allowed"
+                            }`}
                     >
-                        Save
+                        {isLoading ? <Loader className="animate-spin" /> : isEditMode ? "Update" : "Create"}
                     </button>
                 </div>
             </div>

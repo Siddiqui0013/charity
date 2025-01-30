@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import DonateChart from '../components/dashbaord/DonateChart'
 import axiosInstance from '../api/axios';
+import Skeleton from '../components/ui/Skeleton';
+
 const Main = () => {
 
     // const metrics = [
@@ -33,13 +35,10 @@ const Main = () => {
     // ]
 
     const [metrics, setMetrics] = useState({});
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axiosInstance.get('/count').then((response) => {
-            setMetrics(response.data.data)
-        }).catch((error) => {
-            console.log(error);
-        });
+        axiosInstance.get('/count').then(({ data }) => setMetrics(data.data)).finally(() => setLoading(false));
     }, []);
 
     return (
@@ -63,17 +62,23 @@ const Main = () => {
             </div> */}
 
 
-                <div className="grid grid-cols-2 md:grid-cols-3 p-4 lg:grid-cols-6 gap-4">
-                {Object.entries(metrics).map(([key, value], index) => (
-                    <div
-                        key={index}
-                        className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col items-center text-center"
-                    >
-                        <h3 className="text-gray-600 text-base mb-2">{key.replace(/total/g, "")}</h3>
-                        <div className="text-3xl font-bold text-gray-900">{value}</div>
-                    </div>
-                ))}
-                </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 p-4 lg:grid-cols-6 gap-4">
+                {loading ? (
+                    [1, 2, 3, 4, 5, 6].map((_, i) => (
+                        <Skeleton key={i} variant="card" className="w-full h-32" />
+                    ))
+                ) : (
+                    Object.entries(metrics).map(([key, value], index) => (
+                        <div
+                            key={index}
+                            className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col items-center text-center"
+                        >
+                            <h3 className="text-gray-600 text-base mb-2">{key.replace(/total/g, "")}</h3>
+                            <div className="text-3xl font-bold text-gray-900">{value}</div>
+                        </div>
+                    ))
+                )}
+            </div>
 
             <div className="sm:p-4 p-2">
                 <DonateChart />

@@ -15,7 +15,6 @@ export default function AdminLogin() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        console.log('Login attempt with:', formData)
         if (!formData.username || !formData.password) {
             toast('Please fill in all fields', 'error')
             return
