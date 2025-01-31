@@ -2,6 +2,7 @@ import axios from "axios";
 
 const axiosInstance = axios.create({
   baseURL: "https://project116-backend.vercel.app/api/",
+  // baseURL: "http://localhost:3000/api/",
 });
 
 axiosInstance.interceptors.request.use(

@@ -80,7 +80,6 @@ const Campaigns = () => {
         try {
             setApiLoader(true);
             if (isEditMode) {
-                // Update existing campaign
                 const response = await axiosInstance.put(`/donation/${campaignData._id}`, campaignData);
                 setData(prevData =>
                     prevData.map(item =>
@@ -89,13 +88,13 @@ const Campaigns = () => {
                 );
                 toast("Campaign updated successfully", "success");
             } else {
-                // Add new campaign
                 try {
                     const response = await axiosInstance.post("/donation", campaignData);
                     setData(prevData => [...prevData, response.data.data]);
                     toast("Campaign created successfully", "success");
                 } catch (error) {
                     toast("Failed to create campaign", "error");
+                    console.error("Error creating campaign:", error);
                 }
             }
             handleModalClose();

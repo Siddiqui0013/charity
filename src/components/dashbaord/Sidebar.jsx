@@ -1,4 +1,4 @@
-import { Home, Flag, Heart, Newspaper, Calendar, Users, Menu, X, LogOut, Loader } from "lucide-react"
+import { Home, Flag, Heart, Newspaper, Calendar, Users, Menu, BookOpen , X, LogOut, Loader } from "lucide-react"
 import { NavLink, useLocation, useNavigate } from "react-router-dom"
 import { useState } from "react"
 import axiosInstance from "../../api/axios"
@@ -42,6 +42,11 @@ export default function Sidebar() {
             href: "/dashboard/events",
         },
         {
+            icon: <BookOpen className="w-5 h-5" />,
+            label: "Books",
+            href: "/dashboard/books",
+        },
+        {
             icon: <Users className="w-5 h-5" />,
             label: "Team",
             href: "/dashboard/team",
@@ -77,10 +82,11 @@ export default function Sidebar() {
                 <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setIsSidebarOpen(false)} />
             )}
 
-            <div
-                className={`fixed lg:static inset-y-0 left-0 z-40 w-64 transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-                    } min-h-screen bg-white border-r border-gray-200 px-3 py-6`}
-            >
+<div
+    className={`fixed lg:fixed inset-y-0 left-0 z-40 w-64 transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+        isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+    } min-h-screen bg-white border-r border-gray-200 px-3 py-6`}
+>
                 <div className="mb-8 px-3 flex items-center justify-between">
                     <h2 className="text-gray-600 text-lg font-medium">Administrator</h2>
                     <button onClick={() => setIsSidebarOpen(false)} className="lg:hidden p-1 hover:bg-gray-100 rounded-lg">

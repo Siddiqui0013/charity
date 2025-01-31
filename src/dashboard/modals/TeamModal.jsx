@@ -3,26 +3,24 @@
 import { useState, useEffect } from "react";
 import { Loader } from "lucide-react";
 
-const CampaignModal = ({ isOpen, onClose, campaignData, onSave, isEditMode, isLoading }) => {
+const TeamModal = ({ isOpen, onClose, memberData, onSave, isEditMode, isLoading }) => {
     const [formData, setFormData] = useState({
         _id: "",
-        title: "",
-        description: "",
-        goal: "",
-        picture: "", 
+        name: "",
+        role: "",
+        image: ""
     });
 
     useEffect(() => {
-        if (campaignData) {
+        if (memberData) {
             setFormData({
-                ...campaignData,
-                title: campaignData.title || "",
-                description: campaignData.description || "",
-                goal: campaignData.goal || "",
-                picture: campaignData.picture || "",
+                ...memberData,
+                name: memberData.name || "",
+                role: memberData.role || "",
+                image: memberData.image || ""
             });
         }
-    }, [campaignData]);
+    }, [memberData]);
 
     if (!isOpen) return null;
 
@@ -37,52 +35,51 @@ const CampaignModal = ({ isOpen, onClose, campaignData, onSave, isEditMode, isLo
     const handleSave = () => {
         const updatedData = {
             ...formData,
-            reached: parseFloat(formData.reached),
-            goal: parseFloat(formData.goal),
+            image: formData.image.trim() || undefined
         };
 
-        if (isEditMode && campaignData) {
-            updatedData.id = campaignData.id;
+        if (isEditMode && memberData) {
+            updatedData._id = memberData._id;
         }
 
         onSave(updatedData);
     };
 
     const validateForm = () => {
-        return formData.title.trim() !== "" &&
-            formData.description.trim() !== "" &&
-            formData.goal > 0;
+        return formData.name.trim() !== "";
     };
 
     return (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white rounded-3xl max-w-2xl w-full p-8">
                 <h2 className="text-3xl font-bold mb-6">
-                    {isEditMode ? "Edit Campaign" : "Add Campaign"}
+                    {isEditMode ? "Edit Team Member" : "Add Team Member"}
                 </h2>
                 <div className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Title
+                            Name
                         </label>
                         <input
                             type="text"
-                            name="title"
-                            value={formData.title}
+                            name="name"
+                            value={formData.name}
                             onChange={handleChange}
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Enter member name"
                         />
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Description
+                            Role
                         </label>
-                        <textarea
-                            name="description"
-                            value={formData.description}
+                        <input
+                            type="text"
+                            name="role"
+                            value={formData.role}
                             onChange={handleChange}
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            rows="4"
+                            placeholder="Enter member role"
                         />
                     </div>
                     <div>
@@ -91,44 +88,32 @@ const CampaignModal = ({ isOpen, onClose, campaignData, onSave, isEditMode, isLo
                         </label>
                         <input
                             type="text"
-                            name="picture"
-                            value={formData.picture}
+                            name="image"
+                            value={formData.image}
                             onChange={handleChange}
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="https://example.com/image.jpg"
                         />
                     </div>
-                    
-                        <div >
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Goal Amount
-                            </label>
-                            <input
-                                type="number"
-                                name="goal"
-                                value={formData.goal}
-                                onChange={handleChange}
-                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                        </div>
-                    
                 </div>
                 <div className="mt-6 flex justify-end space-x-4">
                     <button
                         onClick={onClose}
+                        disabled={isLoading}
                         className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition"
                     >
                         Cancel
                     </button>
                     <button
                         onClick={handleSave}
-                        disabled={!validateForm()}
-                        className={`px-4 py-2 rounded-lg text-white transition ${validateForm()
-                            ? "bg-green-500 hover:bg-green-600"
-                            : "bg-gray-400 cursor-not-allowed"
-                            }`}
+                        disabled={!validateForm() || isLoading}
+                        className={`px-4 py-2 rounded-lg text-white transition ${
+                            validateForm() && !isLoading
+                                ? "bg-green-500 hover:bg-green-600"
+                                : "bg-gray-400 cursor-not-allowed"
+                        }`}
                     >
-                        {isLoading ? <Loader className="animate-spin" /> : isEditMode ? "Update" : "Create"}
+                        {isLoading ? <Loader className="w-5 h-5 animate-spin" /> : isEditMode ? "Update" : "Create"}
                     </button>
                 </div>
             </div>
@@ -136,4 +121,4 @@ const CampaignModal = ({ isOpen, onClose, campaignData, onSave, isEditMode, isLo
     );
 };
 
-export default CampaignModal;
+export default TeamModal;
