@@ -1,12 +1,14 @@
 import { useState } from 'react'
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, Loader } from 'lucide-react'
 import { useToast } from '../hooks/useToast'
 import { useNavigate } from 'react-router-dom'
+import axiosInstance from '../api/axios'
 
 export default function AdminLogin() {
     const toast = useToast()
     const navigate = useNavigate()
 
+    const [loader, setLoader] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [formData, setFormData] = useState({
         username: '',
@@ -20,17 +22,20 @@ export default function AdminLogin() {
             return
         }
         try {
-            if (formData.username === 'admin' && formData.password === 'admin') {
-                toast('Login successful', 'success')
-                localStorage.setItem('authToken', 'admin')
-                navigate('/dashboard')
-            } else {
-                toast('Invalid credentials', 'error')
+            setLoader(true)
+            const sendableData = {
+                name: formData.username,
+                password: formData.password
             }
+            const response = await axiosInstance.post('/login', sendableData)
+            localStorage.setItem('authToken', response.data.token)
+            toast('Login successful', 'success')
+            navigate('/dashboard')
         } catch (error) {
-            toast('Something went wrong', 'error')
+            toast('Invalid username or password', 'error')
             console.log(error);
-
+        } finally {
+            setLoader(false)
         }
 
     }
@@ -110,9 +115,14 @@ export default function AdminLogin() {
 
                     <button
                         type="submit"
-                        className="w-full bg-emerald-600 text-white py-2 px-4 rounded-md hover:bg-emerald-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
+                        disabled={loader}
+                        className="w-full bg-emerald-600 text-white py-2 px-4 rounded-md hover:bg-emerald-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 text-center"
                     >
-                        Sign In
+                        {loader ? (
+                            <Loader className="w-5 h-5 animate-spin mx-auto" />
+                        ) : (
+                            'Sign in'
+                        )}
                     </button>
                 </form>
             </div>
