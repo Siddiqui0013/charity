@@ -109,7 +109,7 @@ const Campaigns = () => {
 
     if (loading) {
         return (
-            <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="max-w-7xl mx-auto px-2 sm:px-6">
                 <div className="flex justify-between my-5 p-2">
                     <Skeleton className="bg-black w-28 h-5" />
                     <Skeleton className="bg-black w-32 h-8" />
