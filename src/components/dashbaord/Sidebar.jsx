@@ -1,10 +1,17 @@
-import { Home, Flag, Heart, Newspaper, Calendar, Users, Menu, X, LogOut } from "lucide-react"
-import { NavLink, useLocation } from "react-router-dom"
+import { Home, Flag, Heart, Newspaper, Calendar, Users, Menu, X, LogOut, Loader } from "lucide-react"
+import { NavLink, useLocation, useNavigate } from "react-router-dom"
 import { useState } from "react"
+import axiosInstance from "../../api/axios"
+import { useToast } from "../../hooks/useToast"
 
 export default function Sidebar() {
+
+    const [loader, setLoader] = useState(false)
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+
+    const toast = useToast()
     const location = useLocation()
+    const navigate = useNavigate()
 
     const active = (href) => location.pathname === href
 
@@ -41,9 +48,20 @@ export default function Sidebar() {
         },
     ]
 
-    const handleLogout = () => {
-        localStorage.removeItem("authToken")
-        window.location.href = "/login"
+    const handleLogout = async () => {
+        try {
+            setLoader(true)
+            await axiosInstance.post("/logout")
+            localStorage.removeItem("authToken")
+            toast("Logout successful", "success")
+            navigate("/login")
+        } catch (error) {
+            toast("Failed to logout", "error")
+            console.log(error)
+        } finally {
+            setLoader(false)
+        }
+
     }
 
     return (
@@ -83,9 +101,18 @@ export default function Sidebar() {
                         </NavLink>
                     ))}
                 </nav>
-                <button className="flex items-center gap-3 px-3 py-3 rounded-lg transition-colors text-white font-medium w-full hover:bg-primary/90 bg-primary mt-8" onClick={handleLogout}>
-                    <LogOut className="w-5 h-5" />
-                    Sign Out
+                <button disabled={loader} className="flex items-center gap-3 px-3 py-3 rounded-lg transition-colors text-white font-medium w-full hover:bg-primary/90 bg-primary mt-8" onClick={handleLogout}>
+                    {loader ? (
+                        <>
+                            <Loader className="w-5 h-5 animate-spin" />
+                            <span>Loading...</span>
+                        </>
+                    ) : (
+                        <>
+                            <LogOut className="w-5 h-5" />
+                            <span>Sign Out</span>
+                        </>
+                    )}
                 </button>
 
             </div>
