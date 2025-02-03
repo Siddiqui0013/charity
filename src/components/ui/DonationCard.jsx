@@ -9,19 +9,19 @@ export default function DonationCard({
     progress = 75,
 }) {
     return (
-        <div className="max-w-xl bg-white rounded-3xl overflow-hidden shadow hover:shadow-xl transition-shadow">
+        <div className="bg-white md:rounded-3xl rounded-lg overflow-hidden shadow hover:shadow-xl transition-shadow">
             {/* Image */}
-            <div className="w-full h-64 bg-gray-200">
+            <div className="w-full h-56 bg-gray-200">
                 <img src={image || "/placeholder.svg"} alt={title} className="w-full h-full object-cover" />
             </div>
 
             {/* Content */}
-            <div className="sm:p-6 p-4 space-y-4">
+            <div className="sm:p-5 p-3 space-y-4">
 
                 {/* Title and Description */}
-                <div className="space-y-3">
-                    <h2 className="lg:text-2xl text-xl font-bold text-gray-800">{title}</h2>
-                    <p className="text-gray-400 text-base">{description}</p>
+                <div className="space-y-1">
+                    <h2 className="lg:text-lg text-base font-semibold text-gray-800 line-clamp-2">{title}</h2>
+                    <p className="text-gray-400 md:text-base text-sm line-clamp-3">{description}</p>
                 </div>
 
                 {/* Progress Section */}
@@ -46,14 +46,14 @@ export default function DonationCard({
                                 strokeWidth="3"
                                 strokeDasharray={`${progress}, 100`}
                             />
-                            <text x="19" y="22" className="text-xs font-medium" textAnchor="middle">
+                            <text x="19" y="22" className="text-[10px] font-medium" textAnchor="middle">
                                 {progress}%
                             </text>
                         </svg>
                     </div>
 
                     {/* Amounts */}
-                    <div className="flex items-center gap-3 font-bold">
+                    <div className="flex items-center gap-3 font-semibold text-sm">
                         <div>
                             <span className="text-[#01705c]">Raised</span>
                             <div>${raisedAmount.toLocaleString()}</div>
