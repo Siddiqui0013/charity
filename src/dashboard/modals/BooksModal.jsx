@@ -91,16 +91,24 @@ const BookModal = ({ isOpen, onClose, bookData, onSave, isEditMode, isLoading })
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Image URL
+                            Upload Image
                         </label>
                         <input
-                            type="text"
-                            name="image"
-                            value={formData.image}
+                            type="file"
+                            name="picture"
+                            accept="image/*"
                             onChange={handleChange}
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="https://example.com/image.jpg"
                         />
+                        {previewUrl && (
+                            <div className="mt-2">
+                                <img
+                                    src={previewUrl}
+                                    alt="Preview"
+                                    className="w-32 h-32 object-cover rounded-lg"
+                                />
+                            </div>
+                        )}
                     </div>
                 </div>
                 <div className="mt-6 flex justify-end space-x-4">
@@ -114,11 +122,10 @@ const BookModal = ({ isOpen, onClose, bookData, onSave, isEditMode, isLoading })
                     <button
                         onClick={handleSave}
                         disabled={!validateForm() || isLoading}
-                        className={`px-4 py-2 rounded-lg text-white transition ${
-                            validateForm() && !isLoading
+                        className={`px-4 py-2 rounded-lg text-white transition ${validateForm() && !isLoading
                                 ? "bg-green-500 hover:bg-green-600"
                                 : "bg-gray-400 cursor-not-allowed"
-                        }`}
+                            }`}
                     >
                         {isLoading ? <Loader className="w-5 h-5 animate-spin" /> : isEditMode ? "Update" : "Create"}
                     </button>

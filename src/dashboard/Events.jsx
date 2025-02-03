@@ -18,7 +18,9 @@ const Events = () => {
         try {
             setLoading(true);
             const response = await axiosInstance.get("/social-events");
-            setData(response.data.socialEvents || []);
+            setData(response.data.data || []);
+            console.log(response);
+
         } catch (error) {
             console.error("Error fetching Events:", error);
             toast("Failed to fetch Events", "error");

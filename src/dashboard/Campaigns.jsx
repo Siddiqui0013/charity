@@ -3,6 +3,7 @@ import CampaignModal from "./modals/CampaignModal";
 import DeleteModal from "./modals/DeleteModal";
 import axiosInstance from "../api/axios";
 import Skeleton from "../components/ui/Skeleton";
+import Pagination from "../components/ui/Pagination";
 import { useToast } from "../hooks/useToast"; // Assuming you have the toast hook set up
 
 const Campaigns = () => {
@@ -14,6 +15,14 @@ const Campaigns = () => {
     const [apiLoader, setApiLoader] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const toast = useToast();
+
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
+    const handlePageChange = (newPage) => {
+        setPage(newPage);
+        window.scrollTo(0, 0);
+    }
 
     const handleDeleteModalOpen = (campaign) => {
         setSelectedCampaign(campaign);
@@ -31,13 +40,13 @@ const Campaigns = () => {
                 setLoading(true);
                 const response = await axiosInstance.get('/donations', {
                     params: {
-                        page: 1,
-                        per_page: 20
+                        page: page,
+                        per_page: 9
                     }
                 })
                 setData(response?.data.data || []);
                 console.log(response.data);
-                // setTotalPages(Math.ceil(response.data.total / itemsPerPage))
+                setTotalPages(response.data.total_pages);
             } catch (error) {
                 console.error("Error fetching campaigns:", error);
                 toast("Failed to fetch campaigns", "error");
@@ -46,7 +55,7 @@ const Campaigns = () => {
             }
         };
         fetchCampaigns();
-    }, []);
+    }, [page, totalPages]);
 
     const handleDelete = async () => {
         try {
@@ -87,10 +96,10 @@ const Campaigns = () => {
             const config = {
                 headers: { 'Content-Type': 'multipart/form-data' }
             };
-            
+
             if (isEditMode) {
                 const response = await axiosInstance.put(
-                    `/donation/${selectedCampaign._id}`, 
+                    `/donation/${selectedCampaign._id}`,
                     formData,
                     config
                 );
@@ -163,10 +172,10 @@ const Campaigns = () => {
                         </div>
                         <div className="sm:p-6 p-4 space-y-3">
                             <div className="space-y-1">
-                                <h2 className="lg:text-lg font-semibold text-gray-800">
+                                <h2 className="lg:text-lg font-semibold text-gray-800 line-clamp-1">
                                     {campaign.title}
                                 </h2>
-                                <p className="text-gray-400 text-base">
+                                <p className="text-gray-400 text-base line-clamp-2">
                                     {campaign.description}
                                 </p>
                             </div>
@@ -195,6 +204,13 @@ const Campaigns = () => {
                         </div>
                     </div>
                 ))}
+            </div>
+            <div className="mt-12">
+                <Pagination
+                    currentPage={page}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                />
             </div>
 
             <CampaignModal

@@ -21,9 +21,9 @@ const NewsArticles = () => {
         try {
             setLoading(true);
             const response = await axiosInstance.get("/news-articles");
-            setData(response.data.newsArticles || []);
+            setData(response.data.data || []);
             console.log(response.data);
-            
+
         } catch (error) {
             console.error("Error fetching articles:", error);
             toast("Failed to fetch articles", "error");

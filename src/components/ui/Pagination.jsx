@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
-
+import React, { useEffect } from "react"
 import { ArrowRight, ArrowLeft } from "lucide-react"
 
 export default function Pagination({ currentPage = 1, totalPages = 10, onPageChange }) {
-    
+
     const getPageNumbers = () => {
-        const delta = 2 
+        const delta = 2
         const range = []
         const rangeWithDots = []
 
@@ -30,9 +30,17 @@ export default function Pagination({ currentPage = 1, totalPages = 10, onPageCha
         return rangeWithDots
     }
 
+    useEffect(() => {
+        onPageChange(currentPage)
+    }, [currentPage])
+
+    useEffect(() => {
+        getPageNumbers()
+    }, [totalPages, currentPage])
+
     return (
         <nav className="flex items-center justify-center space-x-2">
-            
+
             <button
                 onClick={() => onPageChange(currentPage - 1)}
                 disabled={currentPage === 1}
@@ -42,7 +50,7 @@ export default function Pagination({ currentPage = 1, totalPages = 10, onPageCha
                 <span className="sr-only">Previous page</span>
             </button>
 
-            
+
             <div className="flex items-center space-x-2">
                 {getPageNumbers().map((pageNumber, index) => (
                     <button
@@ -61,7 +69,7 @@ export default function Pagination({ currentPage = 1, totalPages = 10, onPageCha
                 ))}
             </div>
 
-            
+
             <button
                 onClick={() => onPageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}

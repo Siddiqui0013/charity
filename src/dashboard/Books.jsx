@@ -3,6 +3,7 @@ import BookModal from "./modals/BooksModal";
 import axiosInstance from "../api/axios";
 import { useToast } from "../hooks/useToast";
 import DeleteModal from "./modals/DeleteModal";
+import Pagination from "../components/ui/Pagination";
 
 const Books = () => {
     const [data, setData] = useState([]);
@@ -13,15 +14,24 @@ const Books = () => {
     const [apiLoader, setApiLoader] = useState(false);
     const toast = useToast();
 
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
+    const handlePageChange = (newPage) => {
+        setPage(newPage);
+        window.scrollTo(0, 0);
+    }
+
     useEffect(() => {
         fetchBooks();
-    }, []);
+    }, [page]);
 
     const fetchBooks = async () => {
         try {
             setLoading(true);
             const response = await axiosInstance.get("/books");
             setData(response.data.data || []);
+            setTotalPages(response.data.total_pages);
         } catch (error) {
             console.error("Error fetching books:", error);
             toast("Failed to fetch books", "error");
@@ -168,6 +178,14 @@ const Books = () => {
                         </div>
                     </div>
                 ))}
+            </div>
+
+            <div className="mt-6">
+                <Pagination
+                    currentPage={page}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                />
             </div>
 
             <BookModal
