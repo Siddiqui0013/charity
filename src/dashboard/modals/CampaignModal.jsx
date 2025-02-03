@@ -9,8 +9,9 @@ const CampaignModal = ({ isOpen, onClose, campaignData, onSave, isEditMode, isLo
         title: "",
         description: "",
         goal: "",
-        picture: "", 
+        picture: null
     });
+    const [previewUrl, setPreviewUrl] = useState("");
 
     useEffect(() => {
         if (campaignData) {
@@ -19,33 +20,45 @@ const CampaignModal = ({ isOpen, onClose, campaignData, onSave, isEditMode, isLo
                 title: campaignData.title || "",
                 description: campaignData.description || "",
                 goal: campaignData.goal || "",
-                picture: campaignData.picture || "",
+                picture: null
             });
+            setPreviewUrl(campaignData.picture || "");
         }
     }, [campaignData]);
 
     if (!isOpen) return null;
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+        const { name, value, type, files } = e.target;
+        
+        if (type === "file") {
+            const file = files[0];
+            if (file) {
+                setFormData(prev => ({
+                    ...prev,
+                    picture: file
+                }));
+                setPreviewUrl(URL.createObjectURL(file));
+            }
+        } else {
+            setFormData(prev => ({
+                ...prev,
+                [name]: value
+            }));
+        }
     };
 
     const handleSave = () => {
-        const updatedData = {
-            ...formData,
-            reached: parseFloat(formData.reached),
-            goal: parseFloat(formData.goal),
-        };
-
-        if (isEditMode && campaignData) {
-            updatedData.id = campaignData.id;
+        const form = new FormData();
+        form.append("title", formData.title);
+        form.append("description", formData.description);
+        form.append("goal", formData.goal);
+        
+        if (formData.picture) {
+            form.append("picture", formData.picture);
         }
-
-        onSave(updatedData);
+    
+        onSave(form);
     };
 
     const validateForm = () => {
@@ -87,31 +100,37 @@ const CampaignModal = ({ isOpen, onClose, campaignData, onSave, isEditMode, isLo
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Image URL
+                            Upload Image
                         </label>
                         <input
-                            type="text"
+                            type="file"
                             name="picture"
-                            value={formData.picture}
+                            accept="image/*"
                             onChange={handleChange}
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="https://example.com/image.jpg"
+                        />
+                        {previewUrl && (
+                            <div className="mt-2">
+                                <img 
+                                    src={previewUrl} 
+                                    alt="Preview" 
+                                    className="w-32 h-32 object-cover rounded-lg"
+                                />
+                            </div>
+                        )}
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Goal Amount
+                        </label>
+                        <input
+                            type="number"
+                            name="goal"
+                            value={formData.goal}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
-                    
-                        <div >
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Goal Amount
-                            </label>
-                            <input
-                                type="number"
-                                name="goal"
-                                value={formData.goal}
-                                onChange={handleChange}
-                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                        </div>
-                    
                 </div>
                 <div className="mt-6 flex justify-end space-x-4">
                     <button

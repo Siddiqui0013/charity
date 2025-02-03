@@ -25,23 +25,28 @@ const Campaigns = () => {
         setIsDeleteModalOpen(false);
     };
 
-    // Fetch campaigns on component mount
     useEffect(() => {
+        const fetchCampaigns = async () => {
+            try {
+                setLoading(true);
+                const response = await axiosInstance.get('/donations', {
+                    params: {
+                        page: 1,
+                        per_page: 20
+                    }
+                })
+                setData(response?.data.data || []);
+                console.log(response.data);
+                // setTotalPages(Math.ceil(response.data.total / itemsPerPage))
+            } catch (error) {
+                console.error("Error fetching campaigns:", error);
+                toast("Failed to fetch campaigns", "error");
+            } finally {
+                setLoading(false);
+            }
+        };
         fetchCampaigns();
     }, []);
-
-    const fetchCampaigns = async () => {
-        try {
-            setLoading(true);
-            const response = await axiosInstance.get("/donations");
-            setData(response?.data.data || []);
-        } catch (error) {
-            console.error("Error fetching campaigns:", error);
-            toast("Failed to fetch campaigns", "error");
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const handleDelete = async () => {
         try {
@@ -76,31 +81,34 @@ const Campaigns = () => {
         setIsEditMode(false);
     };
 
-    const handleSave = async (campaignData) => {
+    const handleSave = async (formData) => {
         try {
             setApiLoader(true);
+            const config = {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            };
+            
             if (isEditMode) {
-                const response = await axiosInstance.put(`/donation/${campaignData._id}`, campaignData);
+                const response = await axiosInstance.put(
+                    `/donation/${selectedCampaign._id}`, 
+                    formData,
+                    config
+                );
                 setData(prevData =>
                     prevData.map(item =>
-                        item._id === campaignData._id ? response.data.data : item
+                        item._id === selectedCampaign._id ? response.data.data : item
                     )
                 );
                 toast("Campaign updated successfully", "success");
             } else {
-                try {
-                    const response = await axiosInstance.post("/donation", campaignData);
-                    setData(prevData => [...prevData, response.data.data]);
-                    toast("Campaign created successfully", "success");
-                } catch (error) {
-                    toast("Failed to create campaign", "error");
-                    console.error("Error creating campaign:", error);
-                }
+                const response = await axiosInstance.post("/donation", formData, config);
+                setData(prevData => [...prevData, response.data.data]);
+                toast("Campaign created successfully", "success");
             }
             handleModalClose();
         } catch (error) {
             console.error("Error saving campaign:", error);
-            toast("Failed to save campaign", "error");
+            toast(error.response?.data?.message || "Failed to save campaign", "error");
         } finally {
             setApiLoader(false);
         }

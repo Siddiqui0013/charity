@@ -6,25 +6,38 @@ import Skeleton from '../components/ui/Skeleton'
 
 const Donation = () => {
     const [currentPage, setCurrentPage] = useState(1)
-    const totalPages = 10
-
+    const [totalPages, setTotalPages] = useState(20)
     const [loading, setLoading] = useState(true)
     const [data, setData] = useState([])
+    const itemsPerPage = 10
 
     useEffect(() => {
-        fetchDonations()
-    }, [])
-
-    const fetchDonations = async () => {
-        try {
-            const response = await axiosInstance.get('/donations')
-            setData(response.data.data)
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setLoading(false)
+        const fetchDonations = async () => {
+            setLoading(true)
+            try {
+                const response = await axiosInstance.get('/donations', {
+                    params: {
+                        page: currentPage,
+                        per_page: itemsPerPage
+                    }
+                })
+                setData(response.data.data)
+                console.log(response.data);
+                setTotalPages(Math.ceil(response.data.total / itemsPerPage))
+            } catch (error) {
+                console.error('Error fetching donations:', error)
+            } finally {
+                setLoading(false)
+            }
         }
-    }
+
+        fetchDonations()
+    }, [currentPage])
+
+    // const handlePageChange = (page) => {
+    //     setCurrentPage(page)
+    //     window.scrollTo({ top: 0, behavior: 'smooth' })
+    // }
 
     return (
         <div className='py-14 max-w-7xl mx-auto px-4 sm:px-6'>

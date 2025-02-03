@@ -1,9 +1,11 @@
+/* eslint-disable react/prop-types */
+
 import { ArrowRight, ArrowLeft } from "lucide-react"
 
 export default function Pagination({ currentPage = 1, totalPages = 10, onPageChange }) {
-    // Generate page numbers to display
+    
     const getPageNumbers = () => {
-        const delta = 2 // Number of pages to show before and after current page
+        const delta = 2 
         const range = []
         const rangeWithDots = []
 
@@ -30,7 +32,7 @@ export default function Pagination({ currentPage = 1, totalPages = 10, onPageCha
 
     return (
         <nav className="flex items-center justify-center space-x-2">
-            {/* Previous Button */}
+            
             <button
                 onClick={() => onPageChange(currentPage - 1)}
                 disabled={currentPage === 1}
@@ -40,7 +42,7 @@ export default function Pagination({ currentPage = 1, totalPages = 10, onPageCha
                 <span className="sr-only">Previous page</span>
             </button>
 
-            {/* Page Numbers */}
+            
             <div className="flex items-center space-x-2">
                 {getPageNumbers().map((pageNumber, index) => (
                     <button
@@ -59,7 +61,7 @@ export default function Pagination({ currentPage = 1, totalPages = 10, onPageCha
                 ))}
             </div>
 
-            {/* Next Button */}
+            
             <button
                 onClick={() => onPageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
