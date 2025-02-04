@@ -10,6 +10,7 @@ const NewsModal = ({ isOpen, onClose, articleData, onSave, isEditMode, isLoading
         description: "",
         image: ""
     });
+    const [previewUrl, setPreviewUrl] = useState("");
 
     useEffect(() => {
         if (articleData) {
@@ -32,23 +33,36 @@ const NewsModal = ({ isOpen, onClose, articleData, onSave, isEditMode, isLoading
     if (!isOpen) return null;
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+        const { name, value, type, files } = e.target;
+
+        if (type === "file") {
+            const file = files[0];
+            if (file) {
+                setFormData(prev => ({
+                    ...prev,
+                    image: file
+                }));
+                setPreviewUrl(URL.createObjectURL(file));
+            }
+        } else {
+            setFormData(prev => ({
+                ...prev,
+                [name]: value
+            }));
+        }
     };
 
     const handleSave = () => {
-        const updatedData = {
-            ...formData
-        };
+        const form = new FormData();
+        form.append("_id", formData._id);
+        form.append("title", formData.title);
+        form.append("description", formData.description);
 
-        if (isEditMode && articleData) {
-            updatedData._id = articleData._id;
+        if (formData.image) {
+            form.append("picture", formData.image);
         }
 
-        onSave(updatedData);
+        onSave(form);
     };
 
     const validateForm = () => {
@@ -90,16 +104,24 @@ const NewsModal = ({ isOpen, onClose, articleData, onSave, isEditMode, isLoading
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Image URL
+                            Upload Image
                         </label>
                         <input
-                            type="text"
-                            name="image"
-                            value={formData.image}
+                            type="file"
+                            name="picture"
+                            accept="image/*"
                             onChange={handleChange}
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="https://example.com/image.jpg"
                         />
+                        {previewUrl && (
+                            <div className="mt-2">
+                                <img
+                                    src={previewUrl}
+                                    alt="Preview"
+                                    className="w-32 h-32 object-cover rounded-lg"
+                                />
+                            </div>
+                        )}
                     </div>
                 </div>
                 <div className="mt-6 flex justify-end space-x-4">
@@ -113,11 +135,10 @@ const NewsModal = ({ isOpen, onClose, articleData, onSave, isEditMode, isLoading
                     <button
                         onClick={handleSave}
                         disabled={!validateForm() || isLoading}
-                        className={`px-4 py-2 rounded-lg text-white transition ${
-                            validateForm() && !isLoading
-                                ? "bg-green-500 hover:bg-green-600"
-                                : "bg-gray-400 cursor-not-allowed"
-                        }`}
+                        className={`px-4 py-2 rounded-lg text-white transition ${validateForm() && !isLoading
+                            ? "bg-green-500 hover:bg-green-600"
+                            : "bg-gray-400 cursor-not-allowed"
+                            }`}
                     >
                         {isLoading ? <Loader className="w-5 h-5 animate-spin" /> : isEditMode ? "Update" : "Create"}
                     </button>

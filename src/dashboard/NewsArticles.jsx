@@ -3,6 +3,7 @@ import NewsModal from "./modals/NewsModal";
 import axiosInstance from "../api/axios";
 import { useToast } from "../hooks/useToast";
 import DeleteModal from "./modals/DeleteModal";
+import Pagination from "../components/ui/Pagination";
 
 const NewsArticles = () => {
     const [data, setData] = useState([]);
@@ -13,16 +14,29 @@ const NewsArticles = () => {
     const [apiLoader, setApiLoader] = useState(false);
     const toast = useToast();
 
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
+    const handlePageChange = (newPage) => {
+        setPage(newPage);
+        window.scrollTo(0, 0);
+    }
+
     useEffect(() => {
         fetchArticles();
-    }, []);
+    }, [page]);
 
     const fetchArticles = async () => {
         try {
             setLoading(true);
-            const response = await axiosInstance.get("/news-articles");
+            const response = await axiosInstance.get("/news-articles", {
+                params: {
+                    page: page,
+                    per_page: 9
+                }
+            });
             setData(response.data.data || []);
-            console.log(response.data);
+            setTotalPages(response.data.total_pages);
 
         } catch (error) {
             console.error("Error fetching articles:", error);
@@ -90,7 +104,7 @@ const NewsArticles = () => {
                 toast("Article updated successfully", "success");
             } else {
                 const response = await axiosInstance.post("/news-article", articleData);
-                setData(prevData => [...prevData, response.data.article]);
+                setData(prevData => [...prevData, response.data.data]);
                 toast("Article added successfully", "success");
             }
             handleModalClose();
@@ -170,6 +184,13 @@ const NewsArticles = () => {
                         </div>
                     </div>
                 ))}
+            </div>
+            <div className="mt-7">
+                <Pagination
+                    currentPage={page}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                />
             </div>
 
             <NewsModal
