@@ -30,7 +30,7 @@ const CampaignModal = ({ isOpen, onClose, campaignData, onSave, isEditMode, isLo
 
     const handleChange = (e) => {
         const { name, value, type, files } = e.target;
-        
+
         if (type === "file") {
             const file = files[0];
             if (file) {
@@ -50,14 +50,15 @@ const CampaignModal = ({ isOpen, onClose, campaignData, onSave, isEditMode, isLo
 
     const handleSave = () => {
         const form = new FormData();
+        form.append("_id", formData._id);
         form.append("title", formData.title);
         form.append("description", formData.description);
         form.append("goal", formData.goal);
-        
+
         if (formData.picture) {
             form.append("picture", formData.picture);
         }
-    
+
         onSave(form);
     };
 
@@ -69,7 +70,7 @@ const CampaignModal = ({ isOpen, onClose, campaignData, onSave, isEditMode, isLo
 
     return (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-3xl max-w-2xl w-full p-8">
+            <div className="bg-white md:rounded-3xl sm:rounded-xl rounded max-w-2xl w-full sm:p-8 p-5">
                 <h2 className="text-3xl font-bold mb-6">
                     {isEditMode ? "Edit Campaign" : "Add Campaign"}
                 </h2>
