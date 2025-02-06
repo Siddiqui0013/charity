@@ -6,6 +6,8 @@ import Donation from './pages/Donation'
 import ViewDonation from './pages/ViewDonation'
 import Events from './pages/Events'
 import ViewEvent from './pages/ViewEvent'
+import News from './pages/News'
+import ViewNews from './pages/ViewNews'
 //
 import DashboardLayout from './Layout/DashboardLayout'
 import Main from './dashboard/Main'
@@ -51,6 +53,14 @@ function App() {
         {
           path: "/event/:id",
           element: <ViewEvent />
+        },
+        {
+          path: "/news",
+          element: <News />
+        },
+        {
+          path: "/news/:id",
+          element: <ViewNews />
         }
       ]
     },
