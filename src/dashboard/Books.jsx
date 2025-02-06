@@ -23,22 +23,26 @@ const Books = () => {
     }
 
     useEffect(() => {
+        const fetchBooks = async () => {
+            try {
+                setLoading(true);
+                const response = await axiosInstance.get("/books",{
+                    params: {
+                        page: page,
+                        per_page: 20
+                    }
+                });
+                setData(response.data.data || []);
+                setTotalPages(response.data.total_pages);
+            } catch (error) {
+                console.error("Error fetching books:", error);
+                toast("Failed to fetch books", "error");
+            } finally {
+                setLoading(false);
+            }
+        };
         fetchBooks();
     }, [page]);
-
-    const fetchBooks = async () => {
-        try {
-            setLoading(true);
-            const response = await axiosInstance.get("/books");
-            setData(response.data.data || []);
-            setTotalPages(response.data.total_pages);
-        } catch (error) {
-            console.error("Error fetching books:", error);
-            toast("Failed to fetch books", "error");
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
@@ -88,16 +92,19 @@ const Books = () => {
     const handleSave = async (bookData) => {
         try {
             setApiLoader(true);
+            const config = {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            };
             if (isEditMode) {
-                const response = await axiosInstance.put(`/book/${bookData._id}`, bookData);
+                const response = await axiosInstance.put(`/book/${selectedBook._id}`, bookData, config);
                 setData(prevData =>
                     prevData.map(item =>
-                        item._id === bookData._id ? response.data.data : item
+                        item._id === selectedBook._id ? response.data.data : item
                     )
                 );
                 toast("Book updated successfully", "success");
             } else {
-                const response = await axiosInstance.post("/book", bookData);
+                const response = await axiosInstance.post("/book", bookData, config);
                 setData(prevData => [...prevData, response.data.data]);
                 toast("Book added successfully", "success");
             }

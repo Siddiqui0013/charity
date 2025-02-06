@@ -21,13 +21,6 @@ const NewsModal = ({ isOpen, onClose, articleData, onSave, isEditMode, isLoading
                 description: articleData.description || "",
                 image: articleData.image || ""
             });
-        } else {
-            setFormData({
-                _id: "",
-                title: "",
-                description: "",
-                image: ""
-            });
         }
     }, [articleData]);
 
