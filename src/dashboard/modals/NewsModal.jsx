@@ -16,6 +16,7 @@ const NewsModal = ({ isOpen, onClose, articleData, onSave, isEditMode, isLoading
         if (articleData) {
             setFormData({
                 ...articleData,
+                _id: articleData._id || "",
                 title: articleData.title || "",
                 description: articleData.description || "",
                 image: articleData.image || ""
@@ -54,14 +55,23 @@ const NewsModal = ({ isOpen, onClose, articleData, onSave, isEditMode, isLoading
 
     const handleSave = () => {
         const form = new FormData();
-        form.append("_id", formData._id);
+        
+        // Log the formData state before creating FormData
+        console.log("Current form state:", formData);
+        
         form.append("title", formData.title);
         form.append("description", formData.description);
-
-        if (formData.image) {
+    
+        if (formData.image instanceof File) {
             form.append("picture", formData.image);
         }
-
+        
+        // Log what's actually in the FormData
+        console.log("FormData contents:");
+        for (let pair of form.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
+        
         onSave(form);
     };
 
@@ -106,22 +116,24 @@ const NewsModal = ({ isOpen, onClose, articleData, onSave, isEditMode, isLoading
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                             Upload Image
                         </label>
+                        <div className="flex items-center justify-between">
                         <input
                             type="file"
                             name="picture"
                             accept="image/*"
                             onChange={handleChange}
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-[80%] px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                         {previewUrl && (
                             <div className="mt-2">
                                 <img
                                     src={previewUrl}
                                     alt="Preview"
-                                    className="w-32 h-32 object-cover rounded-lg"
+                                    className="w-16 h-16 object-cover rounded-lg"
                                 />
                             </div>
                         )}
+                                                </div>
                     </div>
                 </div>
                 <div className="mt-6 flex justify-end space-x-4">

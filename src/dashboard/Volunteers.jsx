@@ -14,21 +14,22 @@ const Volunteers = () => {
     const toast = useToast();
 
     useEffect(() => {
+        const fetchVolunteers = async () => {
+            try {
+                setLoading(true);
+                const response = await axiosInstance.get("/volunteers");
+                setData(response.data.data || []);
+                console.log(response.data); 
+            } catch (error) {
+                console.error("Error fetching volunteers:", error);
+                toast("Failed to fetch volunteers", "error");
+            } finally {
+                setLoading(false);
+            }
+        };
         fetchVolunteers();
     }, []);
 
-    const fetchVolunteers = async () => {
-        try {
-            setLoading(true);
-            const response = await axiosInstance.get("/volunteers");
-            setData(response.data.volunteers || []);
-        } catch (error) {
-            console.error("Error fetching volunteers:", error);
-            toast("Failed to fetch volunteers", "error");
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 

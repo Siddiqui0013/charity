@@ -23,28 +23,28 @@ const NewsArticles = () => {
     }
 
     useEffect(() => {
+        const fetchArticles = async () => {
+            try {
+                setLoading(true);
+                const response = await axiosInstance.get("/news-articles", {
+                    params: {
+                        page: page,
+                        per_page: 19
+                    }
+                });
+                setData(response.data.data || []);
+                setTotalPages(response.data.total_pages);
+    
+            } catch (error) {
+                console.error("Error fetching articles:", error);
+                toast("Failed to fetch articles", "error");
+            } finally {
+                setLoading(false);
+            }
+        };
         fetchArticles();
     }, [page]);
 
-    const fetchArticles = async () => {
-        try {
-            setLoading(true);
-            const response = await axiosInstance.get("/news-articles", {
-                params: {
-                    page: page,
-                    per_page: 9
-                }
-            });
-            setData(response.data.data || []);
-            setTotalPages(response.data.total_pages);
-
-        } catch (error) {
-            console.error("Error fetching articles:", error);
-            toast("Failed to fetch articles", "error");
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
@@ -94,21 +94,26 @@ const NewsArticles = () => {
     const handleSave = async (articleData) => {
         try {
             setApiLoader(true);
+            const config = {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            };
             if (isEditMode) {
-                const response = await axiosInstance.put(`/news-article/${articleData._id}`, articleData);
+                console.log("Data from modal for editing", articleData);
+                const response = await axiosInstance.put(`/news-article/${selectedArticle._id}`, articleData, config);
                 setData(prevData =>
                     prevData.map(item =>
-                        item._id === articleData._id ? response.data.updatedArticle : item
+                        item._id === selectedArticle._id ? response.data.data : item
                     )
                 );
                 toast("Article updated successfully", "success");
             } else {
-                const response = await axiosInstance.post("/news-article", articleData);
+                const response = await axiosInstance.post("/news-article", articleData, config);
                 setData(prevData => [...prevData, response.data.data]);
                 toast("Article added successfully", "success");
             }
             handleModalClose();
         } catch (error) {
+            console.log("Data from modal for editing", articleData);
             console.error("Error saving article:", error);
             toast("Failed to save article", "error");
         } finally {

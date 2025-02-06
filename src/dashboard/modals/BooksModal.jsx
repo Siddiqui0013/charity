@@ -100,7 +100,7 @@ const BookModal = ({ isOpen, onClose, bookData, onSave, isEditMode, isLoading })
                             onChange={handleChange}
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
-                        {previewUrl && (
+                        {/* {previewUrl && (
                             <div className="mt-2">
                                 <img
                                     src={previewUrl}
@@ -108,7 +108,7 @@ const BookModal = ({ isOpen, onClose, bookData, onSave, isEditMode, isLoading })
                                     className="w-32 h-32 object-cover rounded-lg"
                                 />
                             </div>
-                        )}
+                        )} */}
                     </div>
                 </div>
                 <div className="mt-6 flex justify-end space-x-4">

@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import CampaignModal from "./modals/CampaignModal";
 import DeleteModal from "./modals/DeleteModal";
-import axiosInstance from "../api/axios";
+import axiosInstance, { host } from "../api/axios";
 import Skeleton from "../components/ui/Skeleton";
 import Pagination from "../components/ui/Pagination";
-import { useToast } from "../hooks/useToast"; // Assuming you have the toast hook set up
+import { useToast } from "../hooks/useToast";
 
 const Campaigns = () => {
     const [data, setData] = useState([]);
@@ -15,6 +15,7 @@ const Campaigns = () => {
     const [apiLoader, setApiLoader] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const toast = useToast();
+    const BackendHost = host()
 
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -35,13 +36,15 @@ const Campaigns = () => {
     };
 
     useEffect(() => {
+        console.log("Hosted on", BackendHost);
+        
         const fetchCampaigns = async () => {
             try {
                 setLoading(true);
                 const response = await axiosInstance.get('/donations', {
                     params: {
                         page: page,
-                        per_page: 9
+                        per_page: 20
                     }
                 })
                 setData(response?.data.data || []);
@@ -98,6 +101,7 @@ const Campaigns = () => {
             };
 
             if (isEditMode) {
+                console.log("Data from modal for editing", formData);
                 const response = await axiosInstance.put(
                     `/donation/${selectedCampaign._id}`,
                     formData,
@@ -116,6 +120,7 @@ const Campaigns = () => {
             }
             handleModalClose();
         } catch (error) {
+            console.log("Data from modal for editing", formData);
             console.error("Error saving campaign:", error);
             toast(error.response?.data?.message || "Failed to save campaign", "error");
         } finally {
