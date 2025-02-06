@@ -1,9 +1,9 @@
-
 import { useState, useEffect } from "react";
 import TeamModal from "./modals/TeamModal";
 import axiosInstance from "../api/axios";
 import { useToast } from "../hooks/useToast";
 import DeleteModal from "./modals/DeleteModal";
+import Pagination from "../components/ui/Pagination";
 
 const TeamMembers = () => {
     const [data, setData] = useState([]);
@@ -14,13 +14,27 @@ const TeamMembers = () => {
     const [apiLoader, setApiLoader] = useState(false);
     const toast = useToast();
 
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
+    const handlePageChange = (newPage) => {
+        setPage(newPage);
+        window.scrollTo(0, 0);
+    }
+
     useEffect(() => {
         const fetchTeamMembers = async () => {
             try {
                 setLoading(true);
-                const response = await axiosInstance.get("/team-members");
+                const response = await axiosInstance.get("/team-members", {
+                    params: {
+                        page: page,
+                        per_page: 20
+                    }
+                });
                 setData(response.data.data || []);
                 console.log(response.data);
+                setTotalPages(response.data.total_pages);
                 
             } catch (error) {
                 console.error("Error fetching team members:", error);
@@ -30,7 +44,7 @@ const TeamMembers = () => {
             }
         };
         fetchTeamMembers();
-    }, []);
+    }, [page]);
 
 
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -81,16 +95,19 @@ const TeamMembers = () => {
     const handleSave = async (memberData) => {
         try {
             setApiLoader(true);
+            const config = {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            }
             if (isEditMode) {
-                const response = await axiosInstance.put(`/team-member/${memberData._id}`, memberData);
+                const response = await axiosInstance.put(`/team-member/${selectedMember._id}`, memberData, config);
                 setData(prevData =>
                     prevData.map(item =>
-                        item._id === memberData._id ? response.data.data : item
+                        item._id === selectedMember._id ? response.data.data : item
                     )
                 );
                 toast("Team member updated successfully", "success");
             } else {
-                const response = await axiosInstance.post("/team-member", memberData);
+                const response = await axiosInstance.post("/team-member", memberData, config);
                 setData(prevData => [...prevData, response.data.data]);
                 toast("Team member added successfully", "success");
             }
@@ -170,6 +187,14 @@ const TeamMembers = () => {
                     </div>
                 ))}
             </div>
+
+                        <div className="mt-7">
+                            <Pagination
+                                currentPage={page}
+                                totalPages={totalPages}
+                                onPageChange={handlePageChange}
+                            />
+                        </div>
 
             <TeamModal
                 isOpen={isModalOpen}
