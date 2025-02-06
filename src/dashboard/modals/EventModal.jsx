@@ -12,46 +12,53 @@ const EventModal = ({ isOpen, onClose, eventData, onSave, isEditMode, isLoading 
         author: "",
     });
 
+    const [previewUrl, setPreviewUrl] = useState("");
+
     useEffect(() => {
         if (eventData) {
             setFormData({
                 ...eventData,
                 title: eventData.title || "",
-                picture: eventData.picture || "",
                 date: eventData.date || "",
                 author: eventData.author || "",
+                picture: null
             });
-        } else {
-            setFormData({
-                _id: "",
-                title: "",
-                picture: "",
-                date: "",
-                author: "",
-            });
+            setPreviewUrl(eventData.picture || "");
         }
     }, [eventData]);
 
     if (!isOpen) return null;
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+        const { name, value, type, files } = e.target;
+
+        if (type === "file") {
+            const file = files[0];
+            if (file) {
+                setFormData(prev => ({
+                    ...prev,
+                    picture: file
+                }));
+                setPreviewUrl(URL.createObjectURL(file));
+            }
+        } else {
+            setFormData(prev => ({
+                ...prev,
+                [name]: value
+            }));
+        }
     };
 
     const handleSave = () => {
-        const updatedData = {
-            ...formData
-        };
-
-        if (isEditMode && eventData) {
-            updatedData._id = eventData._id;
+        const form = new FormData();
+        form.append("_id", formData._id);
+        form.append("title", formData.title);
+        form.append("date", formData.date);
+        form.append("author", formData.author);
+        if (formData.picture) {
+            form.append("picture", formData.picture);
         }
-
-        onSave(updatedData);
+        onSave(form);
     };
 
     const validateForm = () => {
@@ -107,16 +114,26 @@ const EventModal = ({ isOpen, onClose, eventData, onSave, isEditMode, isLoading 
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Image URL
+                            Upload Image
                         </label>
-                        <input
-                            type="text"
-                            name="picture"
-                            value={formData.picture}
-                            onChange={handleChange}
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="https://example.com/image.jpg"
-                        />
+                        <div className="flex items-center justify-between">
+                            <input
+                                type="file"
+                                name="picture"
+                                accept="image/*"
+                                onChange={handleChange}
+                                className="w-[80%] px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                            {previewUrl && (
+                                <div className="mt-2">
+                                    <img
+                                        src={previewUrl}
+                                        alt="Preview"
+                                        className="w-20 h-20 object-cover rounded-lg"
+                                    />
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
                 <div className="mt-6 flex justify-end space-x-4">

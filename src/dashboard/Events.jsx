@@ -84,10 +84,10 @@ const Events = () => {
             console.log(eventData);
 
             if (isEditMode) {
-                const response = await axiosInstance.put(`/social-events/${eventData._id}`, eventData);
+                const response = await axiosInstance.put(`/social-event/${selectedEvent._id}`, eventData);
                 setData(prevData =>
                     prevData.map(item =>
-                        item._id === eventData._id ? response.data.updatedEvent : item
+                        item._id === selectedEvent._id ? response.data.data : item
                     )
                 );
                 toast("Event updated successfully", "success");

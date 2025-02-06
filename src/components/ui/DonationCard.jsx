@@ -20,8 +20,8 @@ export default function DonationCard({
 
                 {/* Title and Description */}
                 <div className="space-y-1">
-                    <h2 className="lg:text-lg text-base font-semibold text-gray-800 line-clamp-2">{title}</h2>
-                    <p className="text-gray-400 md:text-base text-sm line-clamp-3">{description}</p>
+                    <h2 className="lg:text-lg text-base font-semibold text-gray-800 line-clamp-1">{title}</h2>
+                    <p className="text-gray-400 md:text-base text-sm line-clamp-2">{description}</p>
                 </div>
 
                 {/* Progress Section */}

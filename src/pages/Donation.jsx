@@ -6,10 +6,10 @@ import Skeleton from '../components/ui/Skeleton'
 
 const Donation = () => {
     const [currentPage, setCurrentPage] = useState(1)
-    const [totalPages, setTotalPages] = useState(20)
+    const [totalPages, setTotalPages] = useState(1)
     const [loading, setLoading] = useState(true)
     const [data, setData] = useState([])
-    const itemsPerPage = 10
+    const itemsPerPage = 9
 
     useEffect(() => {
         const fetchDonations = async () => {
@@ -34,10 +34,10 @@ const Donation = () => {
         fetchDonations()
     }, [currentPage])
 
-    // const handlePageChange = (page) => {
-    //     setCurrentPage(page)
-    //     window.scrollTo({ top: 0, behavior: 'smooth' })
-    // }
+    const handlePageChange = (page) => {
+        setCurrentPage(page)
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
 
     return (
         <div className='py-14 max-w-7xl mx-auto px-4 sm:px-6'>
@@ -54,7 +54,7 @@ const Donation = () => {
                 )}
             </div>
             <div className='p-4 mt-6'>
-                <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+                <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
             </div>
         </div>
     )
