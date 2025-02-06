@@ -6,6 +6,7 @@ import Donation from './pages/Donation'
 import ViewDonation from './pages/ViewDonation'
 import Events from './pages/Events'
 import ViewEvent from './pages/ViewEvent'
+//
 import DashboardLayout from './Layout/DashboardLayout'
 import Main from './dashboard/Main'
 import Campaigns from './dashboard/Campaigns'
@@ -14,6 +15,7 @@ import NewsArticles from './dashboard/NewsArticles'
 import DashboardEvents from "./dashboard/Events"
 import TeamMembers from './dashboard/Team'
 import Books from './dashboard/Books'
+//
 import AdminLogin from './pages/Login'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { ToastProvider } from './components/ui/Toast'
@@ -33,6 +35,7 @@ function App() {
           path: "/about",
           element: <About />
         },
+
         {
           path: "/donation",
           element: <Donation />

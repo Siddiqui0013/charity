@@ -43,11 +43,10 @@ export default function Navbar() {
           >
             Events
           </span>
-          <span className="hover:text-gray-200 cursor-pointer">
-            Services
-          </span>
-          <span className="hover:text-gray-200 cursor-pointer">
-            Blog
+          <span className="hover:text-gray-200 cursor-pointer"
+          onClick={() => navigate("/news")}
+          >
+            News and Articles
           </span>
         </div>
 
@@ -88,10 +87,7 @@ export default function Navbar() {
             Events
           </span>
           <span className="block px-4 py-2 hover:bg-green-600">
-            Services
-          </span>
-          <span className="block px-4 py-2 hover:bg-green-600">
-            Blog
+            News and Articles
           </span>
           <button className="yellowBtn ">
             Donate Now
