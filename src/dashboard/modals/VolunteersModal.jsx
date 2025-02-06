@@ -1,11 +1,13 @@
+/* eslint-disable react/prop-types */
+
 import { useState, useEffect } from "react";
 import { Loader } from "lucide-react";
 
 const VolunteerModal = ({ isOpen, onClose, volunteerData, onSave, isEditMode, isLoading }) => {
+    const [previewUrl, setPreviewUrl] = useState("");
     const [formData, setFormData] = useState({
         _id: "",
         title: "",
-        description: "",
         image: ""
     });
 
@@ -13,40 +15,45 @@ const VolunteerModal = ({ isOpen, onClose, volunteerData, onSave, isEditMode, is
         if (volunteerData) {
             setFormData({
                 ...volunteerData,
+                _id: volunteerData._id || "",
                 title: volunteerData.title || "",
-                description: volunteerData.description || "",
                 image: volunteerData.image || ""
-            });
-        } else {
-            setFormData({
-                _id: "",
-                title: "",
-                description: "",
-                image: ""
-            });
+            })
+            if (volunteerData.image && typeof volunteerData.image === 'string') {
+                setPreviewUrl(volunteerData.image);
+            }
         }
     }, [volunteerData]);
 
     if (!isOpen) return null;
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+        const { name, value, type, files } = e.target;
+
+        if (type === "file") {
+            const file = files[0];
+            if (file) {
+                setFormData(prev => ({
+                    ...prev,
+                    image: file
+                }));
+                setPreviewUrl(URL.createObjectURL(file));
+            }
+        } else {
+            setFormData(prev => ({
+                ...prev,
+                [name]: value
+            }));
+        }
     };
 
     const handleSave = () => {
-        const updatedData = {
-            ...formData
-        };
-
-        if (isEditMode && volunteerData) {
-            updatedData._id = volunteerData._id;
+        const form = new FormData();
+        form.append("title", formData.title);
+        if (formData.image instanceof File) {
+            form.append("picture", formData.image);
         }
-
-        onSave(updatedData);
+        onSave(form);
     };
 
     const validateForm = () => {
@@ -75,29 +82,26 @@ const VolunteerModal = ({ isOpen, onClose, volunteerData, onSave, isEditMode, is
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Description
+                            Upload Image
                         </label>
-                        <textarea
-                            name="description"
-                            value={formData.description}
-                            onChange={handleChange}
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            rows="4"
-                            placeholder="Enter position description"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Image URL
-                        </label>
+                        <div className="flex items-center justify-between">
                         <input
-                            type="text"
-                            name="image"
-                            value={formData.image}
+                            type="file"
+                            name="picture"
+                            accept="image/*"
                             onChange={handleChange}
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="https://example.com/image.jpg"
+                            className="w-[80%] px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
+                        {previewUrl && (
+                            <div className="mt-2">
+                                <img 
+                                    src={previewUrl} 
+                                    alt="Preview" 
+                                    className="w-20 h-20 object-cover rounded-lg"
+                                />
+                            </div>
+                        )}
+                        </div>
                     </div>
                 </div>
                 <div className="mt-6 flex justify-end space-x-4">

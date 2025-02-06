@@ -101,7 +101,6 @@ const Campaigns = () => {
             };
 
             if (isEditMode) {
-                console.log("Data from modal for editing", formData);
                 const response = await axiosInstance.put(
                     `/donation/${selectedCampaign._id}`,
                     formData,

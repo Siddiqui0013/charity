@@ -3,6 +3,7 @@ import VolunteerModal from "./modals/VolunteersModal";
 import axiosInstance from "../api/axios";
 import { useToast } from "../hooks/useToast";
 import DeleteModal from "./modals/DeleteModal";
+import Pagination from "../components/ui/Pagination";
 
 const Volunteers = () => {
     const [data, setData] = useState([]);
@@ -11,14 +12,39 @@ const Volunteers = () => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [loading, setLoading] = useState(true);
     const [apiLoader, setApiLoader] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const toast = useToast();
+
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
+    const handlePageChange = (newPage) => {
+        setPage(newPage);
+        window.scrollTo(0, 0);
+    }
+
+    const handleDeleteModalOpen = (volunteer) => {
+        setSelectedVolunteer(volunteer);
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleDeleteModalClose = () => {
+        setSelectedVolunteer(null);
+        setIsDeleteModalOpen(false);
+    };
 
     useEffect(() => {
         const fetchVolunteers = async () => {
             try {
                 setLoading(true);
-                const response = await axiosInstance.get("/volunteers");
+                const response = await axiosInstance.get("/volunteers",{
+                params: {
+                        page: page,
+                        per_page: 20
+                    }
+                });
                 setData(response.data.data || []);
+                setTotalPages(response.data.total_pages);
                 console.log(response.data); 
             } catch (error) {
                 console.error("Error fetching volunteers:", error);
@@ -30,18 +56,6 @@ const Volunteers = () => {
         fetchVolunteers();
     }, []);
 
-
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
-    const handleDeleteModalOpen = (volunteer) => {
-        setSelectedVolunteer(volunteer);
-        setIsDeleteModalOpen(true);
-    }
-
-    const handleDeleteModalClose = () => {
-        setSelectedVolunteer(null);
-        setIsDeleteModalOpen(false);
-    }
     const handleDelete = async () => {
         try {
             setApiLoader(true);
@@ -78,25 +92,30 @@ const Volunteers = () => {
     const handleSave = async (volunteerData) => {
         try {
             setApiLoader(true);
+            const config = {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            };
             if (isEditMode) {
-                // Update existing volunteer
-                const response = await axiosInstance.put(`/volunteer/${volunteerData._id}`, volunteerData);
+                const response = await axiosInstance.put(`/volunteer/${selectedVolunteer._id}`, volunteerData, config);
+                console.log(response);
+                
                 setData(prevData =>
                     prevData.map(item =>
-                        item._id === volunteerData._id ? response.data.updatedVolunteer : item
+                        item._id === selectedVolunteer._id ? response.data.data : item
                     )
                 );
                 toast("Volunteer updated successfully", "success");
             } else {
                 // Add new volunteer
-                const response = await axiosInstance.post("/volunteer", volunteerData);
-                setData(prevData => [...prevData, response.data.volunteer]);
+                const response = await axiosInstance.post("/volunteer", volunteerData, config);
+                setData(prevData => [...prevData, response.data.data]);
                 toast("Volunteer added successfully", "success");
             }
             handleModalClose();
         } catch (error) {
             console.error("Error saving volunteer:", error);
             toast("Failed to save volunteer", "error");
+
         } finally {
             setApiLoader(false);
         }
@@ -149,9 +168,6 @@ const Volunteers = () => {
                                 <h2 className="text-xl text-center font-semibold text-gray-800">
                                     {volunteer.title}
                                 </h2>
-                                <p className="text-gray-400 text-center sm:text-sm text-xs">
-                                    {volunteer.description}
-                                </p>
                             </div>
                         </div>
                         <div className="absolute top-0 right-0 p-3 space-x-2">
@@ -171,6 +187,13 @@ const Volunteers = () => {
                     </div>
                 ))}
             </div>
+                        <div className="mt-12">
+                            <Pagination
+                                currentPage={page}
+                                totalPages={totalPages}
+                                onPageChange={handlePageChange}
+                            />
+                        </div>
 
             <VolunteerModal
                 isOpen={isModalOpen}
