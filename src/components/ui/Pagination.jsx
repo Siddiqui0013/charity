@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect } from "react"
+import { useEffect } from "react"
 import { ArrowRight, ArrowLeft } from "lucide-react"
 
 export default function Pagination({ currentPage = 1, totalPages = 10, onPageChange }) {
