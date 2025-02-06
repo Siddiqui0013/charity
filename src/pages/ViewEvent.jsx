@@ -18,7 +18,6 @@ export default function ViewEvent() {
 
   return (
     <div className="min-h-screen bg-white p-4 md:p-8 max-w-7xl mx-auto">
-      {/* Event Image */}
       <div className="relative h-[400px] w-full mb-12 rounded-lg overflow-hidden bg-gray-200">
         <img
           src={event.picture}
@@ -28,17 +27,13 @@ export default function ViewEvent() {
         />
       </div>
 
-      {/* Event Title */}
       <h1 className="text-4xl font-bold text-[#252839] mb-6">{event.title}</h1>
 
-      {/* Description */}
       <p className="text-gray-600 mb-12">{event.description}</p>
 
-      {/* Date */}
       <h2 className="text-2xl font-bold text-[#252839] mb-4">Date</h2>
       <p className="text-gray-500 mb-12">{( event.date && (event.date).split("T")[0])}</p>
 
-      {/* Name */}
       <h2 className="text-2xl font-bold text-[#252839] mb-4">Author Name</h2>
       <p className="text-gray-900 font-medium">{event.author}</p>
     </div>
