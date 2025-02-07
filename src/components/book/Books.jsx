@@ -66,7 +66,7 @@ const BookSlider = () => {
     <div className="bg-emerald-600 min-h-[500px] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 py-16">
         <div className="relative">
-          <div className="absolute top-4 right-4 flex gap-2">
+          <div className="absolute -top-5 right-4 flex gap-2">
             {[...Array(totalPages)].map((_, index) => (
               <div
                 key={index}
