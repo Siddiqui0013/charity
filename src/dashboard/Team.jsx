@@ -29,13 +29,13 @@ const TeamMembers = () => {
                 const response = await axiosInstance.get("/team-members", {
                     params: {
                         page: page,
-                        per_page: 20
+                        per_page: 12
                     }
                 });
                 setData(response.data.data || []);
                 console.log(response.data);
                 setTotalPages(response.data.total_pages);
-                
+
             } catch (error) {
                 console.error("Error fetching team members:", error);
                 toast("Failed to fetch team members", "error");
@@ -157,7 +157,7 @@ const TeamMembers = () => {
                     >
                         <div className="aspect-square w-full bg-gray-200 mb-4">
                             <img
-                                src={member.image? member.image : "/placeholder.svg"}
+                                src={member.image ? member.image : "/placeholder.svg"}
                                 alt={member.name}
                                 className="w-full h-full object-cover"
                             />
@@ -188,13 +188,13 @@ const TeamMembers = () => {
                 ))}
             </div>
 
-                        <div className="mt-7">
-                            <Pagination
-                                currentPage={page}
-                                totalPages={totalPages}
-                                onPageChange={handlePageChange}
-                            />
-                        </div>
+            <div className="mt-7">
+                <Pagination
+                    currentPage={page}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                />
+            </div>
 
             <TeamModal
                 isOpen={isModalOpen}

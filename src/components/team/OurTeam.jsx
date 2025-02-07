@@ -1,45 +1,40 @@
 import { useState, useEffect } from "react";
 import TeamMemberImg from "../../assets/team/teamMember.png";
+import axiosInstance from "../../api/axios";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function OurTeam() {
-  const teamMembers = [
-    {
-      name: "Esther Howard",
-      image: TeamMemberImg,
-    },
-    {
-      name: "Dianne Russell",
-      image: TeamMemberImg,
-    },
-    {
-      name: "Darlene Robertson",
-      image: TeamMemberImg,
-    },
-    {
-      name: "Brooklyn Simmons",
-      image: TeamMemberImg,
-    },
-    {
-      name: "John Smith",
-      image: TeamMemberImg,
-    },
-    {
-      name: "Sarah Johnson",
-      image: TeamMemberImg,
-    },
-    {
-      name: "Michael Brown",
-      image: TeamMemberImg,
-    },
-    {
-      name: "Emily Davis",
-      image: TeamMemberImg,
-    },
-  ];
 
   const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
+  const membersPerPage = isMobile ? 1 : 4;
+
+
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        setLoading(true);
+        const response = await axiosInstance.get("/team-members", {
+          params: {
+            page: currentPage + 1,
+            per_page: membersPerPage
+          }
+        });
+        setData(response.data.data || []);
+        setTotalPages(response.data.total_pages);
+
+      } catch (error) {
+        console.error("Error fetching team members:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTeamMembers();
+  }, [currentPage,]);
+
 
   useEffect(() => {
     const checkIsMobile = () => {
@@ -52,20 +47,13 @@ export default function OurTeam() {
     return () => window.removeEventListener('resize', checkIsMobile);
   }, []);
 
-  const membersPerPage = isMobile ? 1 : 4;
-  const totalPages = Math.ceil(teamMembers.length / membersPerPage);
-  
-  const currentMembers = teamMembers.slice(
-    currentPage * membersPerPage,
-    (currentPage + 1) * membersPerPage
-  );
 
   const handlePrev = () => {
-    setCurrentPage((prev) => (prev - 1 + totalPages) % totalPages);
+    setCurrentPage(currentPage - 1);
   };
 
   const handleNext = () => {
-    setCurrentPage((prev) => (prev + 1) % totalPages);
+    setCurrentPage(currentPage + 1);
   };
 
   return (
@@ -90,9 +78,8 @@ export default function OurTeam() {
               {[...Array(totalPages)].map((_, index) => (
                 <div
                   key={index}
-                  className={`w-2 h-2 rounded-full transition-colors ${
-                    currentPage === index ? 'bg-primary' : 'bg-gray-300'
-                  }`}
+                  className={`w-2 h-2 rounded-full transition-colors ${currentPage === index ? 'bg-primary' : 'bg-gray-300'
+                    }`}
                 />
               ))}
             </div>
@@ -106,23 +93,36 @@ export default function OurTeam() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 transition-all duration-300">
-          {currentMembers.map((member, index) => (
-            <div 
-              key={index} 
-              className="flex flex-col items-center"
-            >
-              <div className="mb-4">
-                <div className="w-48 h-48">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+          {loading ? (
+            Array(4).fill("").map((val, index) => (
+              <div key={index}>
+                <div className="bg-gray-200 md:h-28 md:w-28 w-24 h-24 rounded-full animate-pulse mx-auto"></div>
+                <div className="bg-gray-200 h-5 rounded-lg animate-pulse mt-4"></div>
+                <div className="bg-gray-200 h-3 rounded-lg animate-pulse mt-3 w-[95%] mx-auto"></div>
+                <div className="bg-gray-200 h-3 rounded-lg animate-pulse mt-3 w-[95%] mx-auto"></div>
+                <div className="bg-gray-200 h-3 rounded-lg animate-pulse mt-3 w-[95%] mx-auto"></div>
               </div>
-              <h3 className="text-lg font-medium text-gray-900">{member.name}</h3>
-            </div>
-          ))}
+            ))
+          ) : (
+            data.map((member, index) => (
+              <div
+                key={index}
+                className="flex flex-col items-center"
+              >
+                <div className="mb-4">
+                  <div className="w-48 h-48">
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+                <h3 className="text-lg font-medium text-gray-900">{member.name}</h3>
+              </div>
+            ))
+          )}
+
         </div>
       </div>
 
