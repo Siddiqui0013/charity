@@ -1,25 +1,29 @@
-import React from 'react'
 import { ArrowRight } from 'lucide-react'
+import axiosInstance from '../api/axios'
+import { useState, useEffect } from 'react'
 
 const Volunteers = () => {
-    const positions = [
-        {
-            title: 'Health',
-            image: '/volunteers/health.jpg',
-        },
-        {
-            title: 'Education',
-            image: '/volunteers/education.jpg',
-        },
-        {
-            title: 'Protection',
-            image: '/volunteers/protection.jpg',
-        },
-        {
-            title: 'Emergency',
-            image: '/volunteers/emergency.jpg',
-        }
-    ];
+
+    const [positions, setPositions] = useState([])
+
+    useEffect(() => {
+        const fetchPositions = async () => {
+            try {
+                const response = await axiosInstance.get('/volunteers', {
+                    params: {
+                        page: 1,
+                        per_page: 4
+                    }
+                });
+                setPositions(response.data.data);
+            } catch (error) {
+                console.error('Error fetching positions:', error);
+            }
+        };  
+        fetchPositions();
+    }, []);
+
+
     return (
         <div className='py-16'>
             <div className='bg-[url("/volunteerbg.png")] bg-cover bg-center bg-no-repeat xl:w-[80%] md:w-3/4 sm:w-[90%] w-[98%] mx-auto min-h-32 text-white md:p-8 p-4 lg:h-[350px] h-full rounded-3xl'>

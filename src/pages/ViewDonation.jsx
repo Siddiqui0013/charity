@@ -1,44 +1,43 @@
-import { Star, Download } from "lucide-react"
+import { Download } from "lucide-react"
+import { useState, useEffect } from "react"
+import axiosInstance from "../api/axios"
 
 export default function ViewDonation() {
-    const quickAmounts = [10, 25, 50, 100, 150, 200]
-    const contributors = [
-        { name: "Esther Howard", amount: "$75.00", image: "https://picsum.photos/100" },
-        { name: "Dianne Russell", amount: "$700.00", image: "https://picsum.photos/100" },
-        { name: "Darlene Robertson", amount: "$850.00", image: "https://picsum.photos/100" },
-        { name: "Brooklyn Simmons", amount: "$65.00", image: "https://picsum.photos/100" },
-        { name: "Brooklyn Simmons", amount: "$850.00", image: "https://picsum.photos/100" },
-        { name: "Brooklyn Simmons", amount: "$440.00", image: "https://picsum.photos/100" },
-    ]
+
+    const [donation, setDonation] = useState(null)
+    const quickAmounts = [1000, 2000, 3000, 4000, 5000]
+    const donationId = window.location.pathname.split("/")[2]
+
+    useEffect(() => {
+        const fetchDonation = async () => {
+            try {
+                const response = await axiosInstance.get(`/donation/${donationId}`)
+                setDonation(response.data.data)
+                console.log(response.data.data);
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchDonation()
+        }, [ donationId])
+
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [])
 
     return (
         <div className="sm:p-4 p-3 md:p-6 max-w-6xl mx-auto">
-            {/* Hero Image */}
-            <div className="relative w-full h-[400px] rounded-3xl overflow-hidden mb-8">
-                <div className="absolute top-4 right-4 z-10">
-                    <span className="bg-[#ffd249] text-black px-4 py-2 rounded-lg font-medium">Education</span>
-                </div>
-                <img src="https://picsum.photos/800" alt="School Teachers" fill className="object-cover w-full" />
+            
+            <div className="w-full h-[400px] rounded-3xl overflow-hidden mb-8">
+                <img src={donation?.picture} alt={donation?.title} className="object-cover w-full" />
             </div>
 
-            {/* Title Section */}
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold">New School Teachers</h1>
-                <div className="flex items-center gap-2">
-                    <Star className="w-5 h-5 text-[#ffd249] fill-[#ffd249]" />
-                    <span className="text-[#ffd249]">4.5</span>
-                </div>
+            <div className="mb-6">
+                <h1 className="text-3xl font-bold">{donation?.title}</h1>
             </div>
 
-            {/* Description */}
-            <p className="text-gray-800 mb-8">
-                Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
-                standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make
-                a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
-                remaining essentially unchanged.
-            </p>
+            <p className="text-gray-800 mb-8">{donation?.description}</p>
 
-            {/* Target Section */}
             <div className="mb-8">
                 <h2 className="text-xl font-semibold mb-4">Target</h2>
                 <div className="bg-slate-100 p-4 rounded-2xl flex items-center gap-6">
@@ -60,15 +59,15 @@ export default function ViewDonation() {
                     <div className="flex gap-4 text-sm">
                         <div>
                             <div className="text-gray-500">Goal</div>
-                            <div className="font-medium">$12,000</div>
+                            <div className="font-medium">{donation?.goal}</div>
                         </div>
                         <div>
                             <div className="text-gray-500">Raised</div>
-                            <div className="font-medium">$9,000</div>
+                            <div className="font-medium">{donation?.reached}</div>
                         </div>
                         <div>
                             <div className="text-gray-500">To Go</div>
-                            <div className="font-medium">$6,000</div>
+                            <div className="font-medium">{((donation?.goal) - (donation?.reached))}</div>
                         </div>
                     </div>
                 </div>
@@ -204,30 +203,6 @@ export default function ViewDonation() {
                 </div>
             </div>
 
-            {/* Contributors Section */}
-            <div>
-                <h2 className="text-xl font-semibold mb-4">Contributors</h2>
-                <p className="text-gray-800 mb-6">
-                    Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to
-                    make a type specimen book.Lorem ipsum is simply dummy text of the printing and typesetting industry.
-                </p>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                    {contributors.map((contributor, index) => (
-                        <div key={index} className="text-center">
-                            <div className="relative w-full aspect-square rounded-xl overflow-hidden mb-2">
-                                <img
-                                    src={contributor.image || "/placeholder.svg"}
-                                    alt={contributor.name}
-                                    className="object-cover"
-                                />
-                            </div>
-                            <div className="font-medium">{contributor.name}</div>
-                            <div className="text-sm text-primary font-medium">{contributor.amount}</div>
-                        </div>
-                    ))}
-                </div>
-            </div>
         </div>
     )
 }

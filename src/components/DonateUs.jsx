@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import axiosInstance from "../api/axios";
-import Skeleton from "./ui/Skeleton";
+import { useNavigate } from "react-router-dom";
 
 const DonationSection = () => {
 
   const [currentPage, setCurrentPage] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const checkIsMobile = () => {
@@ -16,7 +17,7 @@ const DonationSection = () => {
     window.addEventListener('resize', checkIsMobile);
 
     return () => window.removeEventListener('resize', checkIsMobile);
-  }, []);
+  }, [ ]);
 
   const campaignsPerPage = isMobile ? 1 : 3;
   const [totalPages, setTotalPages] = useState(1);
@@ -47,7 +48,6 @@ const DonationSection = () => {
         setTotalPages(response.data.total_pages);
       } catch (error) {
         console.error("Error fetching campaigns:", error);
-        toast("Failed to fetch campaigns", "error");
       } finally {
         setLoading(false);
       }
@@ -142,9 +142,7 @@ const DonationSection = () => {
                     </span>
                   </div>
                   <button
-                    onClick={() => {
-                      console.log("Donation number", idx + 1);
-                    }}
+                    onClick={() => navigate(`/donation/${donation._id}`)}
                     className="w-full py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors"
                   >
                     Donate Now

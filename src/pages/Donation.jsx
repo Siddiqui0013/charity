@@ -49,7 +49,7 @@ const Donation = () => {
                     )
                 ) : (
                     data.map((donation, index) => (
-                        <DonationCard key={index} image={donation.picture} title={donation.title} description={donation.description} raisedAmount={donation.reached} goalAmount={donation.goal} progress={donation.goal ? (donation.reached / donation.goal) * 100 : 0} />
+                        <DonationCard key={index} id={donation._id} image={donation.picture} title={donation.title} description={donation.description} raisedAmount={donation.reached} goalAmount={donation.goal} progress={donation.goal ? (donation.reached / donation.goal) * 100 : 0} />
                     ))
                 )}
             </div>
