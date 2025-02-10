@@ -1,56 +1,8 @@
 import { useState, useEffect } from "react";
+import axiosInstance from "../api/axios";
+import Skeleton from "./ui/Skeleton";
 
 const DonationSection = () => {
-  const donations = [
-    {
-      title: "Popya Mobile App",
-      image: "https://placehold.co/600x400",
-      description: "Support our mobile app development to help connect donors with those in need. Your donation will help us provide essential resources and services.",
-      raised: 85000,
-      goal: 102000,
-      progress: 85
-    },
-    {
-      title: "Awareness Campaigns",
-      image: "https://placehold.co/600x400",
-      description: "Help us spread awareness about poverty and homelessness through targeted campaigns. Together we can make a difference.",
-      raised: 58000,
-      goal: 82000,
-      progress: 70
-    },
-    {
-      title: "Media Outreach",
-      image: "https://placehold.co/600x400",
-      description: "Support our media initiatives to reach more people and create lasting impact in communities worldwide.",
-      raised: 510800,
-      goal: 650000,
-      progress: 80
-    },
-    {
-      title: "Education Program",
-      image: "https://placehold.co/600x400",
-      description: "Help provide education and learning resources to underprivileged children and youth in need.",
-      raised: 75000,
-      goal: 100000,
-      progress: 75
-    },
-    {
-      title: "Healthcare Support",
-      image: "https://placehold.co/600x400",
-      description: "Support medical care and health services for those who cannot afford essential healthcare.",
-      raised: 92000,
-      goal: 120000,
-      progress: 77
-    },
-    {
-      title: "Healthcare Support",
-      image: "https://placehold.co/600x400",
-      description: "Support medical care and health services for those who cannot afford essential healthcare.",
-      raised: 92000,
-      goal: 120000,
-      progress: 77
-    }
-  ];
 
   const [currentPage, setCurrentPage] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
@@ -67,12 +19,9 @@ const DonationSection = () => {
   }, []);
 
   const campaignsPerPage = isMobile ? 1 : 3;
-  const totalPages = Math.ceil(donations.length / campaignsPerPage);
-  
-  const currentDonations = donations.slice(
-    currentPage * campaignsPerPage,
-    (currentPage + 1) * campaignsPerPage
-  );
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
 
   const handlePrev = () => {
     setCurrentPage((prev) => (prev - 1 + totalPages) % totalPages);
@@ -81,6 +30,30 @@ const DonationSection = () => {
   const handleNext = () => {
     setCurrentPage((prev) => (prev + 1) % totalPages);
   };
+
+  useEffect(() => {
+
+    const fetchCampaigns = async () => {
+      try {
+        setLoading(true);
+        const response = await axiosInstance.get('/donations', {
+          params: {
+            page: currentPage + 1,
+            per_page: campaignsPerPage
+          }
+        })
+        setData(response?.data.data || []);
+        console.log(response.data);
+        setTotalPages(response.data.total_pages);
+      } catch (error) {
+        console.error("Error fetching campaigns:", error);
+        toast("Failed to fetch campaigns", "error");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCampaigns();
+  }, [currentPage]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
@@ -106,9 +79,8 @@ const DonationSection = () => {
               {[...Array(totalPages)].map((_, index) => (
                 <div
                   key={index}
-                  className={`w-2 h-2 rounded-full transition-colors ${
-                    currentPage === index ? 'bg-green-600' : 'bg-gray-300'
-                  }`}
+                  className={`w-2 h-2 rounded-full transition-colors ${currentPage === index ? 'bg-green-600' : 'bg-gray-300'
+                    }`}
                 />
               ))}
             </div>
@@ -125,50 +97,62 @@ const DonationSection = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 transition-all duration-300">
-        {currentDonations.map((donation, idx) => (
-          <div 
-            key={idx}
-            className="flex-1 rounded-2xl my-2 shadow-md overflow-hidden transition-transform duration-300 hover:-translate-y-2"
-          >
-            <img
-              src={donation.image}
-              alt={donation.title}
-              className="w-full h-60 object-cover"
-            />
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-semibold">{donation.title}</h3>
-              </div>
-              <p className="text-gray-600 mb-6 text-sm">
-                {donation.description}
-              </p>
-              <div className="space-y-4">
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className="bg-primary rounded-full h-2"
-                    style={{ width: `${donation.progress}%` }}
-                  />
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">
-                    Raised: ${donation.raised.toLocaleString()}
-                  </span>
-                  <span className="text-gray-600">
-                    Goal: ${donation.goal.toLocaleString()}
-                  </span>
-                </div>
-                <button 
-                  onClick={() => {
-                    console.log("Donation number", idx + 1);
-                  }}
-                  className="w-full py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors"
-                >
-                  Donate Now
-                </button>
+        {loading ? (
+          [1, 2, 3].map((index) => (
+            <div key={index} className="animate-pulse">
+              <div className="h-60 bg-gray-200 rounded-t-3xl"></div>
+              <div className="p-4 space-y-4 bg-white rounded-b-3xl">
+                <div className="h-6 bg-gray-200 rounded w-3/4"></div>
+                <div className="h-4 bg-gray-200 rounded w-full"></div>
+                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          data.map((donation, idx) => (
+            <div
+              key={idx}
+              className="flex-1 rounded-2xl my-2 shadow-md overflow-hidden transition-transform duration-300 hover:-translate-y-2"
+            >
+              <img
+                src={donation.picture}
+                alt={donation.title}
+                className="w-full h-60 object-cover"
+              />
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-xl font-semibold line-clamp-1">{donation.title}</h3>
+                </div>
+                <p className="text-gray-600 mb-6 text-sm line-clamp-2">
+                  {donation.description}
+                </p>
+                <div className="space-y-4">
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className="bg-primary rounded-full h-2"
+                      style={{ width: `${donation.goal && ((donation.achieved || 0) / donation.goal) * 100}%` }}
+                    />
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">
+                      Raised: ${donation.achieved || 0}
+                    </span>
+                    <span className="text-gray-600">
+                      Goal: ${donation.goal}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => {
+                      console.log("Donation number", idx + 1);
+                    }}
+                    className="w-full py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors"
+                  >
+                    Donate Now
+                  </button>
+                </div>
+              </div>
+            </div>
+          )))}
       </div>
     </div>
   );
